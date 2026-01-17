@@ -1,0 +1,52 @@
+﻿<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Materie - Archivio Documenti</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+  <!--
+    README:
+    - Aggiorna Config/archive_index.json per aggiungere nuove materie o documenti.
+    - Ogni documento contiene: id, title, type, date, tags, description, fileUrl, solutionUrl.
+    - L'archivio filtra per materia tramite query string: archive.html?level=<hs|uni>&subject=<id>.
+    - Se level non e presente, l'archivio usa "hs" per compatibilita.
+  -->
+  <div class="accent-strip" aria-hidden="true">
+    <span class="accent accent-teal"></span>
+    <span class="accent accent-blue"></span>
+    <span class="accent accent-yellow"></span>
+  </div>
+
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Archivio didattico</p>
+        <h1>Seleziona una materia</h1>
+        <p class="subtitle">Risorse ordinate per anno con accesso rapido a materiali e soluzioni.</p>
+      </div>
+      <div class="header-actions">
+        <a class="header-pill header-pill-cta" href="login.html">Area Admin</a>
+      </div>
+    </header>
+
+    <main class="subject-sections">
+      <section class="subject-section" aria-labelledby="hsTitle">
+        <h2 class="section-title" id="hsTitle">Scuole Superiori</h2>
+        <div class="subject-grid" id="subjectGridHs"></div>
+      </section>
+      <section class="subject-section" aria-labelledby="uniTitle">
+        <h2 class="section-title" id="uniTitle">Universit&agrave;</h2>
+        <div class="subject-grid" id="subjectGridUni"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="scripts/index.js"></script>
+</body>
+</html>

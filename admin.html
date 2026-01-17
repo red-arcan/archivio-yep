@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin - Archivio Documenti</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+  <div class="accent-strip" aria-hidden="true">
+    <span class="accent accent-teal"></span>
+    <span class="accent accent-blue"></span>
+    <span class="accent accent-yellow"></span>
+  </div>
+
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Gestione archivio</p>
+        <h1>Area Admin</h1>
+        <p class="subtitle">Aggiungi o rimuovi documenti dal database JSON.</p>
+      </div>
+      <div class="admin-actions">
+        <a class="header-pill" href="index.html">Torna alle materie</a>
+        <button class="btn ghost" id="logoutButton" type="button">Logout</button>
+      </div>
+    </header>
+
+    <main class="admin-panel">
+      <p class="form-status" id="adminStatus" role="status"></p>
+
+      <div class="admin-forms">
+        <form class="admin-card admin-form" id="uploadForm">
+          <h3>Carica PDF</h3>
+          <div class="form-row">
+            <label class="form-field">
+              <span>Livello</span>
+              <select name="level" id="uploadLevel" required></select>
+            </label>
+            <label class="form-field">
+              <span>Materia</span>
+              <select name="subject" id="uploadSubject" required></select>
+            </label>
+            <label class="form-field">
+              <span>Anno (solo HS)</span>
+              <select name="year" id="uploadYear">
+                <option value="">-</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-row">
+            <label class="form-field">
+              <span>PDF</span>
+              <input type="file" name="file" accept=".pdf" required>
+            </label>
+            <label class="form-field">
+              <span>Soluzione PDF (opzionale)</span>
+              <input type="file" name="solution" accept=".pdf">
+            </label>
+            <label class="form-field">
+              <span>Titolo (opzionale)</span>
+              <input type="text" name="title" placeholder="Titolo documento">
+            </label>
+          </div>
+          <button class="btn primary" type="submit">Upload</button>
+        </form>
+
+        <form class="admin-card admin-form" id="deleteForm">
+          <h3>Elimina PDF</h3>
+          <div class="form-row">
+            <label class="form-field">
+              <span>Livello</span>
+              <select name="level" id="deleteLevel" required></select>
+            </label>
+            <label class="form-field">
+              <span>Materia</span>
+              <select name="subject" id="deleteSubject" required></select>
+            </label>
+            <label class="form-field">
+              <span>Anno (solo HS)</span>
+              <select name="year" id="deleteYear">
+                <option value="">-</option>
+              </select>
+            </label>
+          </div>
+          <label class="form-field">
+            <span>Filename PDF</span>
+            <input type="text" name="filename" placeholder="nome-file.pdf" required>
+          </label>
+          <button class="btn ghost" type="submit">Elimina</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="scripts/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Archivio Documenti</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+</head>
+<body class="page-archive">
+  <div class="accent-strip" aria-hidden="true">
+    <span class="accent accent-teal"></span>
+    <span class="accent accent-blue"></span>
+    <span class="accent accent-yellow"></span>
+  </div>
+
+  <header class="archive-topbar">
+    <a class="back-link" href="index.html">Torna alle materie</a>
+    <div class="brand-mini">Archivio Documenti</div>
+  </header>
+
+  <div class="archive-layout">
+    <aside class="year-sidebar" aria-label="Filtra per anno">
+      <div class="sidebar-card">
+        <h2>Anno</h2>
+        <ul class="year-list" id="yearList"></ul>
+      </div>
+    </aside>
+
+    <main class="archive-main">
+      <div class="archive-header">
+        <div>
+          <h1 id="subjectTitle">Archivio</h1>
+          <p class="subtitle" id="subjectSubtitle"></p>
+        </div>
+        <label class="search">
+          <span class="search-label">Cerca</span>
+          <input id="searchInput" type="search" placeholder="Cerca per titolo o tag">
+        </label>
+      </div>
+
+      <section class="doc-list" id="docList"></section>
+
+      <section class="empty-state" id="emptyState" hidden>
+        <h3>Nessun documento trovato</h3>
+        <p>Modifica i filtri o prova un'altra parola chiave.</p>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-backdrop" data-modal-close></div>
+    <div class="modal-content" role="document">
+      <button class="modal-close" type="button" data-modal-close aria-label="Chiudi">Chiudi</button>
+      <h2 id="modalTitle"></h2>
+      <p id="modalDescription"></p>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-actions">
+        <a class="btn primary" id="modalOpen" href="#" target="_blank" rel="noopener">Apri</a>
+        <a class="btn ghost" id="modalDownload" href="#" target="_blank" rel="noopener">Scarica</a>
+        <a class="btn ghost" id="modalSolution" href="#" target="_blank" rel="noopener">Soluzione</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="scripts/archive.js"></script>
+</body>
+</html>

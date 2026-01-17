@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - Archivio Documenti</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+  <div class="accent-strip" aria-hidden="true">
+    <span class="accent accent-teal"></span>
+    <span class="accent accent-blue"></span>
+    <span class="accent accent-yellow"></span>
+  </div>
+
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Accesso amministratore</p>
+        <h1>Login</h1>
+        <p class="subtitle">Inserisci le credenziali per gestire i documenti.</p>
+      </div>
+      <a class="header-pill" href="index.html">Torna alle materie</a>
+    </header>
+
+    <main class="admin-panel">
+      <form class="admin-card auth-card" id="loginForm">
+        <h3>Credenziali</h3>
+        <label class="form-field">
+          <span>Username</span>
+          <input type="text" name="username" required>
+        </label>
+        <label class="form-field">
+          <span>Password</span>
+          <input type="password" name="password" required>
+        </label>
+        <button class="btn primary" type="submit">Accedi</button>
+        <p class="form-status" id="loginStatus" role="status"></p>
+      </form>
+    </main>
+  </div>
+
+  <script type="module" src="scripts/login.js"></script>
+</body>
+</html>

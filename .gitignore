@@ -1,0 +1,25 @@
+# PHP
+*.log
+*.cache
+.htaccess.local
+
+# Config files with sensitive data
+Config/configKey.php
+DOCUMENTAZIONE.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+

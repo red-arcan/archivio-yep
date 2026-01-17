@@ -1,0 +1,37 @@
+:root {
+  --color-bg: #f7f8fc;
+  --color-surface: #ffffff;
+  --color-ink: #111827;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-card: #ffffff;
+  --color-shadow: rgba(15, 23, 42, 0.08);
+
+  --accent-teal: #0f8b8d;
+  --accent-blue: #1b6ef3;
+  --accent-yellow: #f4c430;
+  --accent-soft: rgba(27, 110, 243, 0.12);
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 56px;
+
+  --shadow-sm: 0 8px 18px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 16px 32px rgba(15, 23, 42, 0.12);
+
+  --font-sans: "Space Grotesk", "Trebuchet MS", "Segoe UI", sans-serif;
+  --font-serif: "Fraunces", "Georgia", serif;
+
+  --transition: 180ms ease;
+  --max-width: 1200px;
+}
