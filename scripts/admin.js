@@ -8,6 +8,8 @@ const deleteForm = document.getElementById("deleteForm");
 const uploadLevel = document.getElementById("uploadLevel");
 const uploadSubject = document.getElementById("uploadSubject");
 const uploadYear = document.getElementById("uploadYear");
+const uploadCategoryField = document.getElementById("uploadCategoryField");
+const uploadCategory = document.getElementById("uploadCategory");
 const deleteLevel = document.getElementById("deleteLevel");
 const deleteSubject = document.getElementById("deleteSubject");
 const deleteYear = document.getElementById("deleteYear");
@@ -45,8 +47,8 @@ async function handleLogout() {
 
 function populateLevelOptions(select) {
   select.innerHTML = `
-    <option value="hs">hs</option>
-    <option value="uni">uni</option>
+    <option value="hs">Scuole Superiori</option>
+    <option value="uni">Università</option>
   `;
 }
 
@@ -63,16 +65,24 @@ function populateSubjectOptions(level, select) {
   select.innerHTML = subjects.map((subject) => `<option value="${subject}">${subject}</option>`).join("");
 }
 
-function handleLevelChange(levelSelect, subjectSelect, yearSelect) {
+function handleLevelChange(levelSelect, subjectSelect, yearSelect, categoryField, categorySelect) {
   const level = levelSelect.value;
   populateSubjectOptions(level, subjectSelect);
   if (level === "hs") {
     yearSelect.disabled = false;
     yearSelect.required = true;
+    if (categoryField) {
+      categoryField.style.display = "none";
+      if (categorySelect) categorySelect.value = "";
+    }
   } else {
     yearSelect.value = "";
     yearSelect.disabled = true;
     yearSelect.required = false;
+    if (categoryField) {
+      categoryField.style.display = "block";
+      if (categorySelect) categorySelect.required = false;
+    }
   }
 }
 
@@ -96,7 +106,7 @@ async function handleUpload(event) {
 
   setStatus("Upload completato.");
   uploadForm.reset();
-  handleLevelChange(uploadLevel, uploadSubject, uploadYear);
+  handleLevelChange(uploadLevel, uploadSubject, uploadYear, uploadCategoryField, uploadCategory);
 }
 
 async function handleDelete(event) {
@@ -127,14 +137,14 @@ populateLevelOptions(uploadLevel);
 populateLevelOptions(deleteLevel);
 populateYearOptions(uploadYear);
 populateYearOptions(deleteYear);
-handleLevelChange(uploadLevel, uploadSubject, uploadYear);
-handleLevelChange(deleteLevel, deleteSubject, deleteYear);
+handleLevelChange(uploadLevel, uploadSubject, uploadYear, uploadCategoryField, uploadCategory);
+handleLevelChange(deleteLevel, deleteSubject, deleteYear, null, null);
 
 logoutButton.addEventListener("click", handleLogout);
 uploadForm.addEventListener("submit", handleUpload);
 deleteForm.addEventListener("submit", handleDelete);
 uploadLevel.addEventListener("change", () =>
-  handleLevelChange(uploadLevel, uploadSubject, uploadYear)
+  handleLevelChange(uploadLevel, uploadSubject, uploadYear, uploadCategoryField, uploadCategory)
 );
 deleteLevel.addEventListener("change", () =>
   handleLevelChange(deleteLevel, deleteSubject, deleteYear)

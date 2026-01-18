@@ -13,30 +13,27 @@
                         {
                             "id": "1",
                             "name": "1 anno",
-                            "documents": [
-                                
-                            ]
+                            "documents": []
                         },
                         {
                             "id": "2",
                             "name": "2 anno",
-                            "documents": [
-                                
-                            ]
+                            "documents": []
                         },
                         {
                             "id": "3",
                             "name": "3 anno",
-                            "documents": [
-                                
-                            ]
+                            "documents": []
                         },
                         {
                             "id": "4",
                             "name": "4 anno",
-                            "documents": [
-                                
-                            ]
+                            "documents": []
+                        },
+                        {
+                            "id": "5",
+                            "name": "5 anno",
+                            "documents": []
                         }
                     ]
                 },
@@ -49,80 +46,27 @@
                         {
                             "id": "1",
                             "name": "1 anno",
-                            "documents": [
-                                
-                                {
-                                    "id": "fis-1-002",
-                                    "title": "Moto rettilineo uniforme",
-                                    "type": "Verifica",
-                                    "date": "2024-10-03",
-                                    "tags": [
-                                        "moto",
-                                        "velocita"
-                                    ],
-                                    "description": "Esercizi su velocita media e grafici spazio-tempo.",
-                                    "fileUrl": "/src/Documents/hs/fisica/1/moto-rettilineo-uniforme.pdf",
-                                    "solutionUrl": "/src/Documents/hs/fisica/1/moto-rettilineo-uniforme_soluzione.pdf"
-                                },
-                                {
-                                    "id": "fis-1-003",
-                                    "title": "Forze e diagrammi",
-                                    "type": "Slide",
-                                    "date": "2024-10-22",
-                                    "tags": [
-                                        "forze",
-                                        "dinamica"
-                                    ],
-                                    "description": "Slide con esempi di diagrammi corpo libero.",
-                                    "fileUrl": "/src/Documents/hs/fisica/1/forze-diagrammi.pdf",
-                                    "solutionUrl": null
-                                }
-                            ]
+                            "documents": []
                         },
                         {
                             "id": "2",
                             "name": "2 anno",
-                            "documents": [
-                                {
-                                    "id": "fis-2-001",
-                                    "title": "Lavoro, energia e potenza",
-                                    "type": "Appunti",
-                                    "date": "2024-09-25",
-                                    "tags": [
-                                        "energia",
-                                        "potenza"
-                                    ],
-                                    "description": "Sintesi su lavoro meccanico e conservazione dell'energia.",
-                                    "fileUrl": "/src/Documents/hs/fisica/2/lavoro-energia-potenza.pdf",
-                                    "solutionUrl": null
-                                },
-                                {
-                                    "id": "fis-2-002",
-                                    "title": "Verifica su quantita di moto",
-                                    "type": "Verifica",
-                                    "date": "2024-10-12",
-                                    "tags": [
-                                        "urti",
-                                        "quantita di moto"
-                                    ],
-                                    "description": "Problemi guidati con urti elastici e anelastici.",
-                                    "fileUrl": "/src/Documents/hs/fisica/2/quantita-di-moto.pdf",
-                                    "solutionUrl": "/src/Documents/hs/fisica/2/quantita-di-moto_soluzione.pdf"
-                                },
-                                {
-                                    "id": "fis-2-003",
-                                    "title": "Onde meccaniche: panoramica",
-                                    "type": "Slide",
-                                    "date": "2024-10-29",
-                                    "tags": [
-                                        "onde",
-                                        "frequenza"
-                                    ],
-                                    "description": "Slide su caratteristiche delle onde e applicazioni.",
-                                    "fileUrl": "/src/Documents/hs/fisica/2/onde-meccaniche.pdf",
-                                    "solutionUrl": null
-                                }
-                            ]
+                            "documents": []
+                        },
+                        {
+                            "id": "3",
+                            "name": "3 anno",
+                            "documents": []
+                        },
+                        {
+                            "id": "4",
+                            "name": "4 anno",
+                            "documents": []
+                        },
+                        {
+                            "id": "5",
+                            "name": "5 anno",
+                            "documents": []
                         }
                     ]
                 },
@@ -135,92 +79,27 @@
                         {
                             "id": "1",
                             "name": "1 anno",
-                            "documents": [
-                                {
-                                    "id": "chim-1-001",
-                                    "title": "Struttura dell'atomo",
-                                    "type": "Appunti",
-                                    "date": "2024-09-08",
-                                    "tags": [
-                                        "atomo",
-                                        "struttura"
-                                    ],
-                                    "description": "Panoramica su particelle subatomiche e modelli atomici.",
-                                    "fileUrl": "/src/Documents/hs/chimica/1/struttura-atomo.pdf",
-                                    "solutionUrl": null
-                                },
-                                {
-                                    "id": "chim-1-002",
-                                    "title": "Verifica sulle leggi ponderali",
-                                    "type": "Verifica",
-                                    "date": "2024-09-28",
-                                    "tags": [
-                                        "leggi",
-                                        "massa"
-                                    ],
-                                    "description": "Test con esercizi sulle leggi fondamentali.",
-                                    "fileUrl": "/src/Documents/hs/chimica/1/leggi-ponderali.pdf",
-                                    "solutionUrl": "/src/Documents/hs/chimica/1/leggi-ponderali_soluzione.pdf"
-                                },
-                                {
-                                    "id": "chim-1-003",
-                                    "title": "Laboratorio: miscugli e soluzioni",
-                                    "type": "Slide",
-                                    "date": "2024-10-15",
-                                    "tags": [
-                                        "laboratorio",
-                                        "soluzioni"
-                                    ],
-                                    "description": "Slide operative per esperimenti di separazione.",
-                                    "fileUrl": "/src/Documents/hs/chimica/1/miscugli-soluzioni.pdf",
-                                    "solutionUrl": null
-                                }
-                            ]
+                            "documents": []
                         },
                         {
                             "id": "2",
                             "name": "2 anno",
-                            "documents": [
-                                {
-                                    "id": "chim-2-001",
-                                    "title": "Legami chimici essenziali",
-                                    "type": "Appunti",
-                                    "date": "2024-09-22",
-                                    "tags": [
-                                        "legami",
-                                        "ionico"
-                                    ],
-                                    "description": "Schema sui legami ionici, covalenti e metallici.",
-                                    "fileUrl": "/src/Documents/hs/chimica/2/legami-chimici.pdf",
-                                    "solutionUrl": null
-                                },
-                                {
-                                    "id": "chim-2-002",
-                                    "title": "Verifica su reazioni redox",
-                                    "type": "Verifica",
-                                    "date": "2024-10-10",
-                                    "tags": [
-                                        "redox",
-                                        "reazioni"
-                                    ],
-                                    "description": "Esercizi con bilanciamento e numeri di ossidazione.",
-                                    "fileUrl": "/src/Documents/hs/chimica/2/reazioni-redox.pdf",
-                                    "solutionUrl": "/src/Documents/hs/chimica/2/reazioni-redox_soluzione.pdf"
-                                },
-                                {
-                                    "id": "chim-2-003",
-                                    "title": "Chimica organica: gruppi funzionali",
-                                    "type": "Slide",
-                                    "date": "2024-10-27",
-                                    "tags": [
-                                        "organica",
-                                        "gruppi"
-                                    ],
-                                    "description": "Slide sui gruppi funzionali e nomenclatura base.",
-                                    "fileUrl": "/src/Documents/hs/chimica/2/gruppi-funzionali.pdf",
-                                    "solutionUrl": null
-                                }
-                            ]
+                            "documents": []
+                        },
+                        {
+                            "id": "3",
+                            "name": "3 anno",
+                            "documents": []
+                        },
+                        {
+                            "id": "4",
+                            "name": "4 anno",
+                            "documents": []
+                        },
+                        {
+                            "id": "5",
+                            "name": "5 anno",
+                            "documents": []
                         }
                     ]
                 },
@@ -233,92 +112,27 @@
                         {
                             "id": "1",
                             "name": "1 anno",
-                            "documents": [
-                                {
-                                    "id": "sto-1-001",
-                                    "title": "Civilta antiche",
-                                    "type": "Appunti",
-                                    "date": "2024-09-07",
-                                    "tags": [
-                                        "antichita",
-                                        "civilta"
-                                    ],
-                                    "description": "Sintesi su Mesopotamia, Egitto e Grecia.",
-                                    "fileUrl": "/src/Documents/hs/storia/1/civilta-antiche.pdf",
-                                    "solutionUrl": null
-                                },
-                                {
-                                    "id": "sto-1-002",
-                                    "title": "Verifica sulla Roma repubblicana",
-                                    "type": "Verifica",
-                                    "date": "2024-09-25",
-                                    "tags": [
-                                        "roma",
-                                        "repubblica"
-                                    ],
-                                    "description": "Domande guidate su istituzioni e conquiste.",
-                                    "fileUrl": "/src/Documents/hs/storia/1/roma-repubblicana.pdf",
-                                    "solutionUrl": "/src/Documents/hs/storia/1/roma-repubblicana_soluzione.pdf"
-                                },
-                                {
-                                    "id": "sto-1-003",
-                                    "title": "Cronologia essenziale",
-                                    "type": "Slide",
-                                    "date": "2024-10-12",
-                                    "tags": [
-                                        "cronologia",
-                                        "linea del tempo"
-                                    ],
-                                    "description": "Slide con i principali eventi dell'eta antica.",
-                                    "fileUrl": "/src/Documents/hs/storia/1/cronologia-essenziale.pdf",
-                                    "solutionUrl": null
-                                }
-                            ]
+                            "documents": []
                         },
                         {
                             "id": "2",
                             "name": "2 anno",
-                            "documents": [
-                                {
-                                    "id": "sto-2-001",
-                                    "title": "Europa medievale",
-                                    "type": "Appunti",
-                                    "date": "2024-09-20",
-                                    "tags": [
-                                        "medioevo",
-                                        "europa"
-                                    ],
-                                    "description": "Quadro generale su societa e poteri del Medioevo.",
-                                    "fileUrl": "/src/Documents/hs/storia/2/europa-medievale.pdf",
-                                    "solutionUrl": null
-                                },
-                                {
-                                    "id": "sto-2-002",
-                                    "title": "Verifica su rinascimento e riforme",
-                                    "type": "Verifica",
-                                    "date": "2024-10-09",
-                                    "tags": [
-                                        "rinascimento",
-                                        "riforma"
-                                    ],
-                                    "description": "Esercizi con fonti e domande aperte.",
-                                    "fileUrl": "/src/Documents/hs/storia/2/rinascimento-riforme.pdf",
-                                    "solutionUrl": "/src/Documents/hs/storia/2/rinascimento-riforme_soluzione.pdf"
-                                },
-                                {
-                                    "id": "sto-2-003",
-                                    "title": "Eta moderna: mappe concettuali",
-                                    "type": "Slide",
-                                    "date": "2024-10-28",
-                                    "tags": [
-                                        "eta moderna",
-                                        "mappe"
-                                    ],
-                                    "description": "Slide con mappe concettuali di ripasso.",
-                                    "fileUrl": "/src/Documents/hs/storia/2/eta-moderna-mappe.pdf",
-                                    "solutionUrl": null
-                                }
-                            ]
+                            "documents": []
+                        },
+                        {
+                            "id": "3",
+                            "name": "3 anno",
+                            "documents": []
+                        },
+                        {
+                            "id": "4",
+                            "name": "4 anno",
+                            "documents": []
+                        },
+                        {
+                            "id": "5",
+                            "name": "5 anno",
+                            "documents": []
                         }
                     ]
                 },
@@ -331,92 +145,27 @@
                         {
                             "id": "1",
                             "name": "1 anno",
-                            "documents": [
-                                {
-                                    "id": "inf-1-001",
-                                    "title": "Introduzione agli algoritmi",
-                                    "type": "Appunti",
-                                    "date": "2024-09-13",
-                                    "tags": [
-                                        "algoritmi",
-                                        "logica"
-                                    ],
-                                    "description": "Concetti base su sequenze e cicli.",
-                                    "fileUrl": "/src/Documents/hs/informatica/1/introduzione-algoritmi.pdf",
-                                    "solutionUrl": null
-                                },
-                                {
-                                    "id": "inf-1-002",
-                                    "title": "Verifica su pseudocodice",
-                                    "type": "Verifica",
-                                    "date": "2024-10-02",
-                                    "tags": [
-                                        "pseudocodice",
-                                        "esercizi"
-                                    ],
-                                    "description": "Esercizi guidati su strutture di controllo.",
-                                    "fileUrl": "/src/Documents/hs/informatica/1/pseudocodice-verifica.pdf",
-                                    "solutionUrl": "/src/Documents/hs/informatica/1/pseudocodice-verifica_soluzione.pdf"
-                                },
-                                {
-                                    "id": "inf-1-003",
-                                    "title": "Basi di hardware",
-                                    "type": "Slide",
-                                    "date": "2024-10-19",
-                                    "tags": [
-                                        "hardware",
-                                        "componenti"
-                                    ],
-                                    "description": "Slide sui componenti principali del computer.",
-                                    "fileUrl": "/src/Documents/hs/informatica/1/basi-hardware.pdf",
-                                    "solutionUrl": null
-                                }
-                            ]
+                            "documents": []
                         },
                         {
                             "id": "2",
                             "name": "2 anno",
-                            "documents": [
-                                {
-                                    "id": "inf-2-001",
-                                    "title": "Strutture dati essenziali",
-                                    "type": "Appunti",
-                                    "date": "2024-09-23",
-                                    "tags": [
-                                        "strutture dati",
-                                        "liste"
-                                    ],
-                                    "description": "Array, liste e stack con esempi pratici.",
-                                    "fileUrl": "/src/Documents/hs/informatica/2/strutture-dati.pdf",
-                                    "solutionUrl": null
-                                },
-                                {
-                                    "id": "inf-2-002",
-                                    "title": "Verifica su reti locali",
-                                    "type": "Verifica",
-                                    "date": "2024-10-11",
-                                    "tags": [
-                                        "reti",
-                                        "lan"
-                                    ],
-                                    "description": "Domande su topologie e dispositivi di rete.",
-                                    "fileUrl": "/src/Documents/hs/informatica/2/reti-locali.pdf",
-                                    "solutionUrl": "/src/Documents/hs/informatica/2/reti-locali_soluzione.pdf"
-                                },
-                                {
-                                    "id": "inf-2-003",
-                                    "title": "Database: concetti base",
-                                    "type": "Slide",
-                                    "date": "2024-10-30",
-                                    "tags": [
-                                        "database",
-                                        "sql"
-                                    ],
-                                    "description": "Slide introduttive su tabelle e chiavi.",
-                                    "fileUrl": "/src/Documents/hs/informatica/2/database-concetti-base.pdf",
-                                    "solutionUrl": null
-                                }
-                            ]
+                            "documents": []
+                        },
+                        {
+                            "id": "3",
+                            "name": "3 anno",
+                            "documents": []
+                        },
+                        {
+                            "id": "4",
+                            "name": "4 anno",
+                            "documents": []
+                        },
+                        {
+                            "id": "5",
+                            "name": "5 anno",
+                            "documents": []
                         }
                     ]
                 },
@@ -429,92 +178,27 @@
                         {
                             "id": "1",
                             "name": "1 anno",
-                            "documents": [
-                                {
-                                    "id": "let-1-001",
-                                    "title": "Introduzione ai generi letterari",
-                                    "type": "Appunti",
-                                    "date": "2024-09-14",
-                                    "tags": [
-                                        "generi",
-                                        "introduzione"
-                                    ],
-                                    "description": "Riepilogo sui generi principali e le loro caratteristiche.",
-                                    "fileUrl": "/src/Documents/hs/letteratura/1/generi-letterari.pdf",
-                                    "solutionUrl": null
-                                },
-                                {
-                                    "id": "let-1-002",
-                                    "title": "Verifica su narrativa breve",
-                                    "type": "Verifica",
-                                    "date": "2024-10-04",
-                                    "tags": [
-                                        "narrativa",
-                                        "analisi"
-                                    ],
-                                    "description": "Domande su testi brevi e analisi guidate.",
-                                    "fileUrl": "/src/Documents/hs/letteratura/1/narrativa-breve.pdf",
-                                    "solutionUrl": "/src/Documents/hs/letteratura/1/narrativa-breve_soluzione.pdf"
-                                },
-                                {
-                                    "id": "let-1-003",
-                                    "title": "Poesia: figure retoriche",
-                                    "type": "Slide",
-                                    "date": "2024-10-21",
-                                    "tags": [
-                                        "poesia",
-                                        "figure"
-                                    ],
-                                    "description": "Slide con esempi di figure retoriche principali.",
-                                    "fileUrl": "/src/Documents/hs/letteratura/1/figure-retoriche.pdf",
-                                    "solutionUrl": null
-                                }
-                            ]
+                            "documents": []
                         },
                         {
                             "id": "2",
                             "name": "2 anno",
-                            "documents": [
-                                {
-                                    "id": "let-2-001",
-                                    "title": "Autori dell'Ottocento",
-                                    "type": "Appunti",
-                                    "date": "2024-09-26",
-                                    "tags": [
-                                        "ottocento",
-                                        "autori"
-                                    ],
-                                    "description": "Sintesi sui principali autori e correnti.",
-                                    "fileUrl": "/src/Documents/hs/letteratura/2/autori-ottocento.pdf",
-                                    "solutionUrl": null
-                                },
-                                {
-                                    "id": "let-2-002",
-                                    "title": "Verifica su analisi del testo",
-                                    "type": "Verifica",
-                                    "date": "2024-10-13",
-                                    "tags": [
-                                        "analisi",
-                                        "testo"
-                                    ],
-                                    "description": "Scheda con esercizi di analisi guidata.",
-                                    "fileUrl": "/src/Documents/hs/letteratura/2/analisi-testo.pdf",
-                                    "solutionUrl": "/src/Documents/hs/letteratura/2/analisi-testo_soluzione.pdf"
-                                },
-                                {
-                                    "id": "let-2-003",
-                                    "title": "Laboratorio di lettura",
-                                    "type": "Slide",
-                                    "date": "2024-10-31",
-                                    "tags": [
-                                        "lettura",
-                                        "laboratorio"
-                                    ],
-                                    "description": "Slide con attivita e spunti di discussione.",
-                                    "fileUrl": "/src/Documents/hs/letteratura/2/laboratorio-lettura.pdf",
-                                    "solutionUrl": null
-                                }
-                            ]
+                            "documents": []
+                        },
+                        {
+                            "id": "3",
+                            "name": "3 anno",
+                            "documents": []
+                        },
+                        {
+                            "id": "4",
+                            "name": "4 anno",
+                            "documents": []
+                        },
+                        {
+                            "id": "5",
+                            "name": "5 anno",
+                            "documents": []
                         }
                     ]
                 }
@@ -529,42 +213,38 @@
                     "name": "Analisi 1",
                     "topics": "Limiti, Derivate, Integrali",
                     "icon": "grid",
-                    "documents": [
+                    "categories": [
                         {
-                            "id": "ana1-001",
-                            "title": "Limiti e continuita",
-                            "type": "Appunti",
-                            "date": "2024-10-05",
-                            "tags": [
-                                "limiti",
-                                "continuita"
-                            ],
-                            "description": "Sintesi su limiti notevoli e continuita.",
-                            "fileUrl": "/src/Documents/uni/analisi1/limiti-continuita.pdf",
-                            "solutionUrl": null
+                            "id": "Esami",
+                            "name": "Esami",
+                            "documents": [
+                                {
+                                    "id": "analisi1-1768756271",
+                                    "title": "Prova Doc 1",
+                                    "type": "PDF",
+                                    "date": "2026-01-18",
+                                    "tags": [],
+                                    "description": "",
+                                    "fileUrl": "/src/Documents/uni/analisi1/2023-02-16.pdf",
+                                    "solutionUrl": "/src/Documents/uni/analisi1/soluzione_1.pdf"
+                                }
+                            ]
                         },
                         {
-                            "id": "ana1-002",
-                            "title": "Integrali definiti: esercizi",
-                            "type": "Esercizi",
-                            "date": "2025-02-14",
-                            "tags": [
-                                "integrali",
-                                "esercizi"
-                            ],
-                            "description": "Esercizi guidati sugli integrali definiti.",
-                            "fileUrl": "/src/Documents/uni/analisi1/integrali-definiti.pdf",
-                            "solutionUrl": "/src/Documents/uni/analisi1/integrali-definiti_soluzione.pdf"
-                        },
-                        {
-                            "id": "analisi1-1768596737",
-                            "title": "mok 3",
-                            "type": "PDF",
-                            "date": "2026-01-16",
-                            "tags": [],
-                            "description": "",
-                            "fileUrl": "/src/Documents/uni/analisi1/testo232.pdf",
-                            "solutionUrl": "/src/Documents/uni/analisi1/iscritti-9.pdf"
+                            "id": "Prove Parziali",
+                            "name": "Prove Parziali",
+                            "documents": [
+                                {
+                                    "id": "analisi1-1768756301",
+                                    "title": "Prova 2",
+                                    "type": "PDF",
+                                    "date": "2026-01-18",
+                                    "tags": [],
+                                    "description": "",
+                                    "fileUrl": "/src/Documents/uni/analisi1/2023-07-20.pdf",
+                                    "solutionUrl": "/src/Documents/uni/analisi1/soluzione_2.pdf"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -573,32 +253,16 @@
                     "name": "Analisi 2",
                     "topics": "Serie, Integrali impropri, Fourier",
                     "icon": "grid",
-                    "documents": [
+                    "categories": [
                         {
-                            "id": "ana2-001",
-                            "title": "Serie numeriche: criteri",
-                            "type": "Appunti",
-                            "date": "2025-03-10",
-                            "tags": [
-                                "serie",
-                                "criteri"
-                            ],
-                            "description": "Riepilogo dei principali criteri di convergenza.",
-                            "fileUrl": "/src/Documents/uni/analisi2/serie-numeriche.pdf",
-                            "solutionUrl": null
+                            "id": "Esami",
+                            "name": "Esami",
+                            "documents": []
                         },
                         {
-                            "id": "ana2-002",
-                            "title": "Fourier e applicazioni",
-                            "type": "Slide",
-                            "date": "2025-04-02",
-                            "tags": [
-                                "fourier",
-                                "trasformate"
-                            ],
-                            "description": "Slide introduttive su serie di Fourier.",
-                            "fileUrl": "/src/Documents/uni/analisi2/fourier-applicazioni.pdf",
-                            "solutionUrl": null
+                            "id": "Prove Parziali",
+                            "name": "Prove Parziali",
+                            "documents": []
                         }
                     ]
                 },
@@ -607,32 +271,16 @@
                     "name": "Fisica 1",
                     "topics": "Meccanica, Termodinamica",
                     "icon": "atom",
-                    "documents": [
+                    "categories": [
                         {
-                            "id": "fis1-001",
-                            "title": "Cinematica del punto materiale",
-                            "type": "Appunti",
-                            "date": "2024-10-12",
-                            "tags": [
-                                "cinematica",
-                                "moto"
-                            ],
-                            "description": "Schema su moto rettilineo e accelerato.",
-                            "fileUrl": "/src/Documents/uni/fisica1/cinematica-punto-materiale.pdf",
-                            "solutionUrl": null
+                            "id": "Esami",
+                            "name": "Esami",
+                            "documents": []
                         },
                         {
-                            "id": "fis1-002",
-                            "title": "Termodinamica: primo principio",
-                            "type": "Verifica",
-                            "date": "2025-01-20",
-                            "tags": [
-                                "termodinamica",
-                                "energia"
-                            ],
-                            "description": "Esercizi sul primo principio e applicazioni.",
-                            "fileUrl": "/src/Documents/uni/fisica1/termodinamica-primo-principio.pdf",
-                            "solutionUrl": "/src/Documents/uni/fisica1/termodinamica-primo-principio_soluzione.pdf"
+                            "id": "Prove Parziali",
+                            "name": "Prove Parziali",
+                            "documents": []
                         }
                     ]
                 },
@@ -641,32 +289,16 @@
                     "name": "Fisica 2",
                     "topics": "Elettromagnetismo, Onde",
                     "icon": "atom",
-                    "documents": [
+                    "categories": [
                         {
-                            "id": "fis2-001",
-                            "title": "Campi elettrici essenziali",
-                            "type": "Appunti",
-                            "date": "2025-02-05",
-                            "tags": [
-                                "campi",
-                                "elettrico"
-                            ],
-                            "description": "Sintesi su campo elettrico e potenziale.",
-                            "fileUrl": "/src/Documents/uni/fisica2/campi-elettrici.pdf",
-                            "solutionUrl": null
+                            "id": "Esami",
+                            "name": "Esami",
+                            "documents": []
                         },
                         {
-                            "id": "fis2-002",
-                            "title": "Onde elettromagnetiche",
-                            "type": "Slide",
-                            "date": "2025-03-22",
-                            "tags": [
-                                "onde",
-                                "elettromagnetismo"
-                            ],
-                            "description": "Slide su propagazione e spettro.",
-                            "fileUrl": "/src/Documents/uni/fisica2/onde-elettromagnetiche.pdf",
-                            "solutionUrl": null
+                            "id": "Prove Parziali",
+                            "name": "Prove Parziali",
+                            "documents": []
                         }
                     ]
                 },
@@ -675,32 +307,16 @@
                     "name": "Algebra Lineare",
                     "topics": "Spazi vettoriali, Matrici",
                     "icon": "grid",
-                    "documents": [
+                    "categories": [
                         {
-                            "id": "alg-001",
-                            "title": "Spazi vettoriali: basi",
-                            "type": "Appunti",
-                            "date": "2024-11-02",
-                            "tags": [
-                                "spazi",
-                                "basi"
-                            ],
-                            "description": "Definizioni e esempi di basi e dimensione.",
-                            "fileUrl": "/src/Documents/uni/algebra-lineare/spazi-vettoriali.pdf",
-                            "solutionUrl": null
+                            "id": "Esami",
+                            "name": "Esami",
+                            "documents": []
                         },
                         {
-                            "id": "alg-002",
-                            "title": "Matrici e sistemi lineari",
-                            "type": "Esercizi",
-                            "date": "2025-02-18",
-                            "tags": [
-                                "matrici",
-                                "sistemi"
-                            ],
-                            "description": "Esercizi con metodo di Gauss.",
-                            "fileUrl": "/src/Documents/uni/algebra-lineare/matrici-sistemi.pdf",
-                            "solutionUrl": "/src/Documents/uni/algebra-lineare/matrici-sistemi_soluzione.pdf"
+                            "id": "Prove Parziali",
+                            "name": "Prove Parziali",
+                            "documents": []
                         }
                     ]
                 },
@@ -709,32 +325,16 @@
                     "name": "Chimica",
                     "topics": "Struttura, Reazioni",
                     "icon": "beaker",
-                    "documents": [
+                    "categories": [
                         {
-                            "id": "chim-uni-001",
-                            "title": "Struttura molecolare",
-                            "type": "Appunti",
-                            "date": "2024-10-18",
-                            "tags": [
-                                "struttura",
-                                "molecole"
-                            ],
-                            "description": "Richiamo su geometrie e legami.",
-                            "fileUrl": "/src/Documents/uni/chimica/struttura-molecolare.pdf",
-                            "solutionUrl": null
+                            "id": "Esami",
+                            "name": "Esami",
+                            "documents": []
                         },
                         {
-                            "id": "chim-uni-002",
-                            "title": "Cinetica e equilibrio",
-                            "type": "Slide",
-                            "date": "2025-03-05",
-                            "tags": [
-                                "cinetica",
-                                "equilibrio"
-                            ],
-                            "description": "Slide su velocita di reazione ed equilibrio.",
-                            "fileUrl": "/src/Documents/uni/chimica/cinetica-equilibrio.pdf",
-                            "solutionUrl": null
+                            "id": "Prove Parziali",
+                            "name": "Prove Parziali",
+                            "documents": []
                         }
                     ]
                 }

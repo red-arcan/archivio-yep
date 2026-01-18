@@ -8,6 +8,7 @@ $level = $_POST["level"] ?? "";
 $subject = $_POST["subject"] ?? "";
 $year = $_POST["year"] ?? "";
 $title = trim($_POST["title"] ?? "");
+$category = trim($_POST["category"] ?? "");
 
 if (!$level || !$subject || empty($_FILES["file"])) {
   echo json_encode(["ok" => false, "error" => "Dati mancanti."]);
@@ -204,12 +205,39 @@ if ($level === "hs") {
       "name" => ucfirst($subject),
       "topics" => "",
       "icon" => "grid",
-      "documents" => []
+      "categories" => [
+        [
+          "id" => "Esami",
+          "name" => "Esami",
+          "documents" => []
+        ],
+        [
+          "id" => "Prove Parziali",
+          "name" => "Prove Parziali",
+          "documents" => []
+        ]
+      ]
     ];
     $index["levels"]["uni"]["subjects"][] = &$subjectRef;
   }
 
-  $subjectRef["documents"][] = [
+  // Ensure categories exist
+  if (!isset($subjectRef["categories"])) {
+    $subjectRef["categories"] = [
+      [
+        "id" => "Esami",
+        "name" => "Esami",
+        "documents" => []
+      ],
+      [
+        "id" => "Prove Parziali",
+        "name" => "Prove Parziali",
+        "documents" => []
+      ]
+    ];
+  }
+
+  $docData = [
     "id" => $subject . "-" . time(),
     "title" => $title !== "" ? $title : $safeName,
     "type" => "PDF",
@@ -219,6 +247,29 @@ if ($level === "hs") {
     "fileUrl" => $relativePath,
     "solutionUrl" => $solutionPath
   ];
+
+  // Use default category if not specified
+  $targetCategory = $category !== "" ? $category : "Esami";
+
+  // Find and add to the correct category
+  $added = false;
+  foreach ($subjectRef["categories"] as &$categoryRef) {
+    if ($categoryRef["id"] === $targetCategory) {
+      $categoryRef["documents"][] = $docData;
+      $added = true;
+      break;
+    }
+  }
+
+  // If category doesn't exist, add to Esami as default
+  if (!$added) {
+    foreach ($subjectRef["categories"] as &$categoryRef) {
+      if ($categoryRef["id"] === "Esami") {
+        $categoryRef["documents"][] = $docData;
+        break;
+      }
+    }
+  }
 }
 
 file_put_contents($indexPath, json_encode($index, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

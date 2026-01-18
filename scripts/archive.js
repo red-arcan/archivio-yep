@@ -3,6 +3,9 @@ const BASE_PATH = "/ArchivioYep";
 
 const elements = {
   yearList: document.getElementById("yearList"),
+  yearFilterCard: document.getElementById("yearFilterCard"),
+  categoryFilterCard: document.getElementById("categoryFilterCard"),
+  categoryList: document.getElementById("categoryList"),
   subjectTitle: document.getElementById("subjectTitle"),
   subjectSubtitle: document.getElementById("subjectSubtitle"),
   searchInput: document.getElementById("searchInput"),
@@ -22,8 +25,10 @@ const state = {
   level: "hs",
   subject: null,
   years: [],
+  categories: [],
   documents: [],
   yearId: "all",
+  categoryId: "all",
   search: "",
   modalDoc: null
 };
@@ -113,12 +118,11 @@ async function resolveSubject() {
   const data = await fetchSubject(state.level, subjectId);
   state.subject = data.subject;
   if (state.level === "hs") {
-    state.years = [];
-    for (let year = 1; year <= 5; year += 1) {
-      state.years.push({ id: String(year), name: `${year} anno` });
-    }
+    state.years = data.years || [];
+    state.categories = [];
   } else {
     state.years = [];
+    state.categories = data.categories || [];
   }
   state.documents = data.documents || [];
 }
@@ -131,6 +135,17 @@ function renderYears() {
   const items = [{ id: "all", name: "Tutti gli anni" }];
   if (state.level === "hs") {
     items.push(...state.years);
+    elements.yearFilterCard.style.display = "block";
+    if (elements.categoryFilterCard) {
+      elements.categoryFilterCard.style.display = "none";
+    }
+  } else {
+    if (elements.yearFilterCard) {
+      elements.yearFilterCard.style.display = "none";
+    }
+    if (elements.categoryFilterCard) {
+      elements.categoryFilterCard.style.display = "block";
+    }
   }
   elements.yearList.innerHTML = items
     .map((year) => {
@@ -160,10 +175,19 @@ function getDocsForState() {
   if (!state.subject) {
     return [];
   }
-  if (state.yearId === "all") {
-    return state.documents;
+  let docs = state.documents;
+  
+  if (state.level === "hs") {
+    if (state.yearId !== "all") {
+      docs = docs.filter((doc) => doc.yearId === state.yearId);
+    }
+  } else {
+    if (state.categoryId !== "all") {
+      docs = docs.filter((doc) => doc.yearId === state.categoryId);
+    }
   }
-  return state.documents.filter((doc) => doc.yearId === state.yearId);
+  
+  return docs;
 }
 
 function renderDocs() {
@@ -259,6 +283,24 @@ function handleYearClick(event) {
   renderDocs();
 }
 
+function handleCategoryClick(event) {
+  const target = event.target.closest("[data-category-id]");
+  if (!target) {
+    return;
+  }
+  state.categoryId = target.dataset.categoryId;
+  
+  // Update active state
+  if (elements.categoryList) {
+    elements.categoryList.querySelectorAll(".chip").forEach((chip) => {
+      chip.classList.remove("active");
+    });
+    target.classList.add("active");
+  }
+  
+  renderDocs();
+}
+
 function handleSearch(event) {
   state.search = event.target.value;
   renderDocs();
@@ -304,6 +346,9 @@ async function init() {
   renderDocs();
 
   elements.yearList.addEventListener("click", handleYearClick);
+  if (elements.categoryList) {
+    elements.categoryList.addEventListener("click", handleCategoryClick);
+  }
   elements.searchInput.addEventListener("input", handleSearch);
   document.addEventListener("click", (event) => {
     if (event.target.closest("[data-doc-id]")) {

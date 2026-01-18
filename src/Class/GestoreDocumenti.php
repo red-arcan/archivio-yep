@@ -69,13 +69,26 @@ class GestoreDocumenti
         }
       }
     } else {
-      $subjectDocs = $subject["documents"] ?? [];
-      foreach ($subjectDocs as $doc) {
-        $documents[] = $this->buildDocument($doc, null, null);
+      $categories = $subject["categories"] ?? [];
+      foreach ($categories as $category) {
+        $categoryId = $category["id"];
+        $categoryName = $category["name"];
+        $categoryDocs = $category["documents"] ?? [];
+        foreach ($categoryDocs as $doc) {
+          $documents[] = $this->buildDocument($doc, $categoryId, $categoryName);
+        }
       }
     }
 
     $documents = array_values(array_filter($documents));
+
+    $years = [];
+    $categories = [];
+    if ($level === "hs") {
+      $years = $subject["years"] ?? [];
+    } else {
+      $categories = $subject["categories"] ?? [];
+    }
 
     return [
       "subject" => [
@@ -90,6 +103,12 @@ class GestoreDocumenti
           "name" => $year["name"]
         ];
       }, $years),
+      "categories" => array_map(function ($category) {
+        return [
+          "id" => $category["id"],
+          "name" => $category["name"]
+        ];
+      }, $categories),
       "documents" => array_map(function (Documento $doc) {
         return $doc->toArray();
       }, $documents)
@@ -266,12 +285,14 @@ class GestoreDocumenti
         }
       }
     } else {
-      foreach ($subject["documents"] ?? [] as $doc) {
-        if ($this->isSolutionDocument($doc)) {
-          continue;
-        }
-        if ($this->fileExists($doc["fileUrl"] ?? "")) {
-          $count++;
+      foreach ($subject["categories"] ?? [] as $category) {
+        foreach ($category["documents"] ?? [] as $doc) {
+          if ($this->isSolutionDocument($doc)) {
+            continue;
+          }
+          if ($this->fileExists($doc["fileUrl"] ?? "")) {
+            $count++;
+          }
         }
       }
     }

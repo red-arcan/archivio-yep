@@ -22,10 +22,30 @@
   </header>
 
   <div class="archive-layout">
-    <aside class="year-sidebar" aria-label="Filtra per anno">
-      <div class="sidebar-card">
+    <aside class="year-sidebar" aria-label="Filtri">
+      <div class="sidebar-card" id="yearFilterCard">
         <h2>Anno</h2>
         <ul class="year-list" id="yearList"></ul>
+      </div>
+      <div class="sidebar-card" id="categoryFilterCard" style="display: none;">
+        <h2>Categoria</h2>
+        <ul class="year-list" id="categoryList">
+          <li>
+            <button class="chip active" data-category-id="all">
+              Tutte
+            </button>
+          </li>
+          <li>
+            <button class="chip" data-category-id="Esami">
+              Esami
+            </button>
+          </li>
+          <li>
+            <button class="chip" data-category-id="Prove Parziali">
+              Prove Parziali
+            </button>
+          </li>
+        </ul>
       </div>
     </aside>
 
