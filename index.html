@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="it">
 <head>
   <meta charset="utf-8">
@@ -10,18 +10,20 @@
   <link rel="stylesheet" href="styles/components.css">
 </head>
 <body>
-  <!--
-    README:
-    - Aggiorna Config/archive_index.json per aggiungere nuove materie o documenti.
-    - Ogni documento contiene: id, title, type, date, tags, description, fileUrl, solutionUrl.
-    - L'archivio filtra per materia tramite query string: archive.html?level=<hs|uni>&subject=<id>.
-    - Se level non e presente, l'archivio usa "hs" per compatibilita.
-  -->
+ 
   <div class="accent-strip" aria-hidden="true">
-    <span class="accent accent-teal"></span>
-    <span class="accent accent-blue"></span>
-    <span class="accent accent-yellow"></span>
+    <span class="accent accent-teal"> </span>
+    <span class="accent accent-blue"> </span>
+    <span class="accent accent-yellow"> </span>
   </div>
+
+  <nav class="top-nav">
+    <a class="back-link" href="https://centroyep.it">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Torna al sito
+    </a>
+    <a class="header-pill header-pill-cta" href="login.html">Area Admin</a>
+  </nav>
 
   <div class="page">
     <header class="page-header">
@@ -29,9 +31,6 @@
         <p class="eyebrow">Archivio didattico</p>
         <h1>Seleziona una materia</h1>
         <p class="subtitle">Risorse ordinate per anno con accesso rapido a materiali e soluzioni.</p>
-      </div>
-      <div class="header-actions">
-        <a class="header-pill header-pill-cta" href="login.html">Area Admin</a>
       </div>
     </header>
 

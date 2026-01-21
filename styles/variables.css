@@ -1,20 +1,30 @@
 :root {
+  /* Palette Pantone */
+  --color-black: #1d1d1b;       /* Pantone Process Black C */
+  --color-green: #00a887;       /* Pantone Green C */
+  --color-blue: #1380c3;        /* Pantone Process Blue C */
+  --color-yellow: #ffc62d;      /* Pantone 123 C */
+  --color-white: #ffffff;       /* Bianco */
+
+  /* Semantici */
   --color-bg: #f7f8fc;
-  --color-surface: #ffffff;
-  --color-ink: #111827;
-  --color-muted: #6b7280;
+  --color-surface: var(--color-white);
+  --color-ink: var(--color-black);
+  --color-muted: #5a5a58;
   --color-border: #e5e7eb;
-  --color-card: #ffffff;
-  --color-shadow: rgba(15, 23, 42, 0.08);
+  --color-card: var(--color-white);
+  --color-shadow: rgba(29, 29, 27, 0.08);
 
-  --accent-teal: #0f8b8d;
-  --accent-blue: #1b6ef3;
-  --accent-yellow: #f4c430;
-  --accent-soft: rgba(27, 110, 243, 0.12);
+  /* Accent colors mappati ai Pantone */
+  --accent-teal: var(--color-green);
+  --accent-blue: var(--color-green);
+  --accent-yellow: var(--color-yellow);
+  --accent-soft: rgba(0, 168, 135, 0.12);
 
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
+  /* Angoli vivi */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -26,11 +36,16 @@
   --space-8: 40px;
   --space-9: 56px;
 
-  --shadow-sm: 0 8px 18px rgba(15, 23, 42, 0.08);
-  --shadow-md: 0 16px 32px rgba(15, 23, 42, 0.12);
+  --shadow-sm: 0 8px 18px rgba(29, 29, 27, 0.08);
+  --shadow-md: 0 16px 32px rgba(29, 29, 27, 0.12);
 
-  --font-sans: "Space Grotesk", "Trebuchet MS", "Segoe UI", sans-serif;
-  --font-serif: "Fraunces", "Georgia", serif;
+  /* Font Outfit */
+  --font-sans: "Outfit", "Segoe UI", sans-serif;
+  --font-serif: "Outfit", "Segoe UI", sans-serif;
+  --font-light: 300;
+  --font-regular: 400;
+  --font-bold: 700;
+  --font-black: 900;
 
   --transition: 180ms ease;
   --max-width: 1200px;

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap");
 
 * {
   box-sizing: border-box;
@@ -13,6 +13,7 @@ body {
 
 body {
   font-family: var(--font-sans);
+  font-weight: var(--font-regular);
   color: var(--color-ink);
   background: var(--color-bg);
   min-height: 100vh;
@@ -46,4 +47,21 @@ ul {
 
 .no-scroll {
   overflow: hidden;
+}
+
+/* Font weight utilities */
+.font-light {
+  font-weight: var(--font-light);
+}
+
+.font-regular {
+  font-weight: var(--font-regular);
+}
+
+.font-bold {
+  font-weight: var(--font-bold);
+}
+
+.font-black {
+  font-weight: var(--font-black);
 }

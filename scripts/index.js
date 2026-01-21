@@ -72,7 +72,6 @@ function renderCard(subject, level) {
         <p class="subject-topics">${subject.topics || ""}</p>
         <div class="subject-meta">
           <span>${subject.resourceCount} Risorse</span>
-          <span class="arrow">-&gt;</span>
         </div>
       </div>
     </a>

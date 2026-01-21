@@ -21,10 +21,18 @@
       <div>
         <p class="eyebrow">Gestione archivio</p>
         <h1>Area Admin</h1>
-        <p class="subtitle">Aggiungi o rimuovi documenti dal database JSON.</p>
+        <p class="subtitle">Aggiungi o rimuovi documenti </p>
+        <p class="subtitle">Le regole sono le seguenti: </p>
+        <p class="subtitle">1. Ogni pdf deve avere un nome univoco. (esempio: prova_1.pdf)</p>
+        <p class="subtitle">2. Ogni soluzione associata deve avere un nome univoco e contenere nel nome del pdf la parola "soluzione" (esempio: soluzione_prova_1.pdf)</p>
+        <p class="subtitle">3. Per eliminare il file inserire il nome del file completo (esempio: prova_1.pdf), la solzuione è eliminata automaticamente.</p>
+        
       </div>
       <div class="admin-actions">
-        <a class="header-pill" href="index.html">Torna alle materie</a>
+        <a class="back-link" href="index.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Torna alle materie
+        </a>
         <button class="btn ghost" id="logoutButton" type="button">Logout</button>
       </div>
     </header>
@@ -45,7 +53,7 @@
               <select name="subject" id="uploadSubject" required></select>
             </label>
             <label class="form-field">
-              <span>Anno (solo HS)</span>
+              <span>Anno (solo Superiori)</span>
               <select name="year" id="uploadYear">
                 <option value="">-</option>
               </select>
@@ -67,7 +75,7 @@
             <label class="form-field">
               <span>Soluzione PDF (opzionale)</span>
               <input type="file" name="solution" accept=".pdf">
-            </label>
+            </label> <br>
             <label class="form-field">
               <span>Titolo (opzionale)</span>
               <input type="text" name="title" placeholder="Titolo documento">
@@ -88,7 +96,7 @@
               <select name="subject" id="deleteSubject" required></select>
             </label>
             <label class="form-field">
-              <span>Anno (solo HS)</span>
+              <span>Anno (solo Superiori)</span>
               <select name="year" id="deleteYear">
                 <option value="">-</option>
               </select>

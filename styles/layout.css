@@ -1,4 +1,4 @@
-﻿.accent-strip {
+.accent-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   height: 44px;
@@ -8,16 +8,17 @@
   display: block;
 }
 
+/* Sequenza: Verde, Blu, Giallo */
 .accent-teal {
-  background: var(--accent-teal);
+  background: var(--color-green);
 }
 
 .accent-blue {
-  background: var(--accent-blue);
+  background: var(--color-blue);
 }
 
 .accent-yellow {
-  background: var(--accent-yellow);
+  background: var(--color-yellow);
 }
 
 .page {
@@ -40,7 +41,8 @@
 
 .section-title {
   font-size: clamp(1.4rem, 2.2vw, 2rem);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
+  font-weight: var(--font-bold);
   letter-spacing: -0.01em;
 }
 
