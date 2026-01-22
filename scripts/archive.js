@@ -15,10 +15,7 @@ const elements = {
   modalTitle: document.getElementById("modalTitle"),
   modalDescription: document.getElementById("modalDescription"),
   modalMeta: document.getElementById("modalMeta"),
-  modalTags: document.getElementById("modalTags"),
-  modalOpen: document.getElementById("modalOpen"),
-  modalDownload: document.getElementById("modalDownload"),
-  modalSolution: document.getElementById("modalSolution")
+  modalTags: document.getElementById("modalTags")
 };
 
 const state = {
@@ -216,7 +213,7 @@ function renderDocs() {
             </div>
             <div class="actions">
               <a class="btn primary" href="${fileUrl}" target="_blank" rel="noopener">Apri</a>
-              <a class="btn ghost" href="${fileUrl}" target="_blank" rel="noopener">Scarica</a>
+              <a class="btn ghost" href="${fileUrl}" download>Scarica</a>
               ${solution}
               <button class="btn ghost" data-action="details" data-doc-id="${doc.id}">Dettagli</button>
             </div>
@@ -243,30 +240,15 @@ function renderModal() {
   }
 
   const doc = state.modalDoc;
-  const fileUrl = BASE_PATH + doc.fileUrl;
-  const solutionUrl = doc.solutionUrl ? BASE_PATH + doc.solutionUrl : null;
+  const label = state.level === "uni" ? "Categoria" : "Anno";
   elements.modalTitle.textContent = doc.title;
-  elements.modalDescription.textContent = doc.description;
   elements.modalMeta.innerHTML = `
     <div>Tipo: ${doc.type}</div>
     <div>Data: ${doc.date}</div>
-    <div>Anno: ${doc.yearName || ""}</div>
+    <div>${label}: ${doc.yearName || ""}</div>
   `;
   elements.modalTags.innerHTML = doc.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
-  elements.modalOpen.href = fileUrl;
-  elements.modalDownload.href = fileUrl;
-
-  if (solutionUrl) {
-    elements.modalSolution.href = solutionUrl;
-    elements.modalSolution.classList.remove("disabled");
-    elements.modalSolution.setAttribute("aria-disabled", "false");
-    elements.modalSolution.removeAttribute("tabindex");
-  } else {
-    elements.modalSolution.href = "#";
-    elements.modalSolution.classList.add("disabled");
-    elements.modalSolution.setAttribute("aria-disabled", "true");
-    elements.modalSolution.setAttribute("tabindex", "-1");
-  }
+  elements.modalDescription.textContent = doc.description || "Nessuna descrizione disponibile.";
 
   elements.modal.classList.add("open");
   elements.modal.setAttribute("aria-hidden", "false");

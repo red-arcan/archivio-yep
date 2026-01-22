@@ -13,7 +13,9 @@
                         {
                             "id": "1",
                             "name": "1 anno",
-                            "documents": []
+                            "documents": [
+                                
+                            ]
                         },
                         {
                             "id": "2",
@@ -46,7 +48,9 @@
                         {
                             "id": "1",
                             "name": "1 anno",
-                            "documents": []
+                            "documents": [
+                                
+                            ]
                         },
                         {
                             "id": "2",
@@ -217,34 +221,12 @@
                         {
                             "id": "Esami",
                             "name": "Esami",
-                            "documents": [
-                                {
-                                    "id": "analisi1-1768756271",
-                                    "title": "Prova Doc 1",
-                                    "type": "PDF",
-                                    "date": "2026-01-18",
-                                    "tags": [],
-                                    "description": "",
-                                    "fileUrl": "/src/Documents/uni/analisi1/2023-02-16.pdf",
-                                    "solutionUrl": "/src/Documents/uni/analisi1/soluzione_1.pdf"
-                                }
-                            ]
+                            "documents": []
                         },
                         {
                             "id": "Prove Parziali",
                             "name": "Prove Parziali",
-                            "documents": [
-                                {
-                                    "id": "analisi1-1768756301",
-                                    "title": "Prova 2",
-                                    "type": "PDF",
-                                    "date": "2026-01-18",
-                                    "tags": [],
-                                    "description": "",
-                                    "fileUrl": "/src/Documents/uni/analisi1/2023-07-20.pdf",
-                                    "solutionUrl": "/src/Documents/uni/analisi1/soluzione_2.pdf"
-                                }
-                            ]
+                            "documents": []
                         }
                     ]
                 },

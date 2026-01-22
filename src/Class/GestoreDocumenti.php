@@ -121,6 +121,7 @@ class GestoreDocumenti
     $subjectId = $payload["subjectId"] ?? "";
     $yearId = $payload["yearId"] ?? null;
     $filename = $payload["filename"] ?? "";
+    $categoryId = $payload["categoryId"] ?? null;
 
     if ($this->isSolutionFileName($filename)) {
       return ["success" => false, "message" => "Il file di soluzione non puo essere aggiunto come documento."];
@@ -144,7 +145,8 @@ class GestoreDocumenti
       "tags" => $this->normalizeTags($payload["tags"] ?? ""),
       "description" => $payload["description"] ?? "",
       "fileUrl" => $fileUrl,
-      "solutionUrl" => null
+      "solutionUrl" => null,
+      "p" => 1
     ];
 
     $doc["solutionUrl"] = $this->detectSolutionUrl($doc["fileUrl"]);
@@ -172,11 +174,32 @@ class GestoreDocumenti
     } else {
       $updated = false;
       foreach ($this->index["levels"]["uni"]["subjects"] as &$subjectRef) {
-        if ($subjectRef["id"] === $subjectId) {
-          $subjectRef["documents"][] = $doc;
-          $updated = true;
-          break;
+        if ($subjectRef["id"] !== $subjectId) {
+          continue;
         }
+        $categories = $subjectRef["categories"] ?? [];
+        if (!$categories) {
+          $subjectRef["categories"] = [
+            [
+              "id" => "Esami",
+              "name" => "Esami",
+              "documents" => []
+            ]
+          ];
+        }
+        $targetCategory = $categoryId ?: ($subjectRef["categories"][0]["id"] ?? "Esami");
+        foreach ($subjectRef["categories"] as &$categoryRef) {
+          if ($categoryRef["id"] === $targetCategory) {
+            $categoryRef["documents"][] = $doc;
+            $updated = true;
+            break;
+          }
+        }
+        if (!$updated) {
+          $subjectRef["categories"][0]["documents"][] = $doc;
+          $updated = true;
+        }
+        break;
       }
       if (!$updated) {
         return ["success" => false, "message" => "Materia non trovata."];
@@ -191,6 +214,10 @@ class GestoreDocumenti
   public function removeDocument(string $level, string $subjectId, string $docId): array
   {
     $removed = false;
+    $fileUrl = null;
+    $solutionUrl = null;
+    $year = null;
+    $category = null;
 
     if ($level === "hs") {
       foreach ($this->index["levels"]["hs"]["subjects"] as &$subjectRef) {
@@ -203,7 +230,10 @@ class GestoreDocumenti
           foreach ($docs as $doc) {
             if ($doc["id"] === $docId) {
               $removed = true;
-              continue;
+              $fileUrl = $doc["fileUrl"] ?? null;
+              $solutionUrl = $doc["solutionUrl"] ?? null;
+              $year = $yearRef["id"] ?? null;
+              $doc["p"] = 0;
             }
             $newDocs[] = $doc;
           }
@@ -215,16 +245,21 @@ class GestoreDocumenti
         if ($subjectRef["id"] !== $subjectId) {
           continue;
         }
-        $docs = $subjectRef["documents"] ?? [];
-        $newDocs = [];
-        foreach ($docs as $doc) {
-          if ($doc["id"] === $docId) {
-            $removed = true;
-            continue;
+        foreach ($subjectRef["categories"] ?? [] as &$categoryRef) {
+          $docs = $categoryRef["documents"] ?? [];
+          $newDocs = [];
+          foreach ($docs as $doc) {
+            if ($doc["id"] === $docId) {
+              $removed = true;
+              $fileUrl = $doc["fileUrl"] ?? null;
+              $solutionUrl = $doc["solutionUrl"] ?? null;
+              $category = $categoryRef["id"] ?? null;
+              $doc["p"] = 0;
+            }
+            $newDocs[] = $doc;
           }
-          $newDocs[] = $doc;
+          $categoryRef["documents"] = $newDocs;
         }
-        $subjectRef["documents"] = $newDocs;
       }
     }
 
@@ -234,8 +269,16 @@ class GestoreDocumenti
 
     $this->saveIndex($this->index);
 
-    return ["success" => true];
+    return [
+      "success" => true,
+      "fileUrl" => $fileUrl,
+      "solutionUrl" => $solutionUrl,
+      "year" => $year,
+      "category" => $category
+    ];
   }
+
+  
 
   private function loadIndex(): array
   {
@@ -276,6 +319,9 @@ class GestoreDocumenti
     if ($level === "hs") {
       foreach ($subject["years"] ?? [] as $year) {
         foreach ($year["documents"] ?? [] as $doc) {
+          if (($doc["p"] ?? 1) === 0) {
+            continue;
+          }
           if ($this->isSolutionDocument($doc)) {
             continue;
           }
@@ -287,6 +333,9 @@ class GestoreDocumenti
     } else {
       foreach ($subject["categories"] ?? [] as $category) {
         foreach ($category["documents"] ?? [] as $doc) {
+          if (($doc["p"] ?? 1) === 0) {
+            continue;
+          }
           if ($this->isSolutionDocument($doc)) {
             continue;
           }
@@ -301,6 +350,9 @@ class GestoreDocumenti
 
   private function buildDocument(array $docData, ?string $yearId, ?string $yearName): ?Documento
   {
+    if (($docData["p"] ?? 1) === 0) {
+      return null;
+    }
     if ($this->isSolutionDocument($docData)) {
       return null;
     }

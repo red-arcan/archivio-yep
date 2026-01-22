@@ -21,12 +21,11 @@
       <div>
         <p class="eyebrow">Gestione archivio</p>
         <h1>Area Admin</h1>
-        <p class="subtitle">Aggiungi o rimuovi documenti </p>
-        <p class="subtitle">Le regole sono le seguenti: </p>
-        <p class="subtitle">1. Ogni pdf deve avere un nome univoco. (esempio: prova_1.pdf)</p>
-        <p class="subtitle">2. Ogni soluzione associata deve avere un nome univoco e contenere nel nome del pdf la parola "soluzione" (esempio: soluzione_prova_1.pdf)</p>
-        <p class="subtitle">3. Per eliminare il file inserire il nome del file completo (esempio: prova_1.pdf), la solzuione è eliminata automaticamente.</p>
-        
+        <p class="subtitle">Aggiungi o rimuovi documenti</p>
+        <p class="subtitle">Le regole sono le seguenti:</p>
+        <p class="subtitle">1. Ogni PDF deve avere un nome univoco. (esempio: prova_1.pdf)</p>
+        <p class="subtitle">2. Ogni soluzione associata deve avere un nome univoco e contenere nel nome del PDF la parola "soluzione" (esempio: soluzione_prova_1.pdf)</p>
+        <p class="subtitle">3. Per eliminare il file inserire il nome del file completo (esempio: prova_1.pdf), la soluzione e eliminata automaticamente.</p>
       </div>
       <div class="admin-actions">
         <a class="back-link" href="index.html">
@@ -45,28 +44,43 @@
           <h3>Carica PDF</h3>
           <div class="form-row">
             <label class="form-field">
-              <span>Livello</span>
+              <span>Sezione</span>
               <select name="level" id="uploadLevel" required></select>
             </label>
+          </div>
+          <div class="form-row">
             <label class="form-field">
               <span>Materia</span>
               <select name="subject" id="uploadSubject" required></select>
             </label>
-            <label class="form-field">
+            <label class="form-field" id="uploadYearField">
               <span>Anno (solo Superiori)</span>
               <select name="year" id="uploadYear">
                 <option value="">-</option>
               </select>
             </label>
             <label class="form-field" id="uploadCategoryField" style="display: none;">
-              <span>Categoria (solo Università)</span>
+              <span>Categoria (solo Universita)</span> <br>
               <select name="category" id="uploadCategory">
-                <option value="">Tutte</option>
                 <option value="Esami">Esami</option>
                 <option value="Prove Parziali">Prove Parziali</option>
               </select>
             </label>
           </div>
+          <div class="form-row">
+            <label class="form-field">
+              <span>Titolo (opzionale)</span>
+              <input type="text" name="title" placeholder="Titolo documento">
+            </label>
+            <label class="form-field">
+              <span>Tag (separati da ;)</span>
+              <input type="text" name="tags" placeholder="esempio: algebra;integrali;esame">
+            </label>
+          </div>
+          <label class="form-field">
+            <span>Descrizione (opzionale)</span>
+            <textarea name="description" rows="3" placeholder="Breve descrizione del contenuto"></textarea>
+          </label>
           <div class="form-row">
             <label class="form-field">
               <span>PDF</span>
@@ -75,38 +89,47 @@
             <label class="form-field">
               <span>Soluzione PDF (opzionale)</span>
               <input type="file" name="solution" accept=".pdf">
-            </label> <br>
-            <label class="form-field">
-              <span>Titolo (opzionale)</span>
-              <input type="text" name="title" placeholder="Titolo documento">
             </label>
           </div>
           <button class="btn primary" type="submit">Upload</button>
         </form>
 
         <form class="admin-card admin-form" id="deleteForm">
-          <h3>Elimina PDF</h3>
+          <h3>Elimina Documento</h3>
           <div class="form-row">
             <label class="form-field">
-              <span>Livello</span>
+              <span>Sezione</span>
               <select name="level" id="deleteLevel" required></select>
             </label>
+          </div>
+          <div class="form-row">
             <label class="form-field">
               <span>Materia</span>
               <select name="subject" id="deleteSubject" required></select>
             </label>
-            <label class="form-field">
+            <label class="form-field" id="deleteYearField">
               <span>Anno (solo Superiori)</span>
               <select name="year" id="deleteYear">
                 <option value="">-</option>
               </select>
             </label>
+            <label class="form-field" id="deleteCategoryField" style="display: none;">
+              <span>Categoria (solo Universita)</span> <br>
+              <select name="category" id="deleteCategory">
+                <option value="Esami">Esami</option>
+                <option value="Prove Parziali">Prove Parziali</option>
+              </select>
+            </label>
           </div>
-          <label class="form-field">
-            <span>Filename PDF</span>
-            <input type="text" name="filename" placeholder="nome-file.pdf" required>
-          </label>
-          <button class="btn ghost" type="submit">Elimina</button>
+          <div class="form-row">
+            <label class="form-field">
+              <span>Documento</span>
+              <select name="document" id="deleteDocument" required>
+                <option value="">Seleziona un documento...</option>
+              </select>
+            </label>
+          </div>
+          <button class="btn ghost" type="submit">Elimina Documento</button>
         </form>
       </div>
     </main>

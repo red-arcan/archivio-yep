@@ -72,10 +72,35 @@ switch ($action) {
     $level = $_POST["level"] ?? "";
     $subjectId = $_POST["subjectId"] ?? "";
     $docId = $_POST["docId"] ?? "";
+    
+    // Rimuove dal JSON
     $result = $gestore->removeDocument($level, $subjectId, $docId);
     if (!$result["success"]) {
       respond($result, 400);
     }
+    
+    // Elimina i file fisici (stessa logica di delete_file.php)
+    $rootPath = dirname(__DIR__, 2);
+    $fileUrl = $result["fileUrl"] ?? null;
+    $solutionUrl = $result["solutionUrl"] ?? null;
+    
+    if ($fileUrl) {
+      $filePath = $rootPath . DIRECTORY_SEPARATOR . ltrim($fileUrl, "/");
+      $realPath = realpath($filePath);
+      $rootReal = realpath($rootPath);
+      if ($realPath && $rootReal && strpos($realPath, $rootReal) === 0 && file_exists($realPath)) {
+        @unlink($realPath);
+      }
+    }
+    if ($solutionUrl) {
+      $solutionPath = $rootPath . DIRECTORY_SEPARATOR . ltrim($solutionUrl, "/");
+      $realPath = realpath($solutionPath);
+      $rootReal = realpath($rootPath);
+      if ($realPath && $rootReal && strpos($realPath, $rootReal) === 0 && file_exists($realPath)) {
+        @unlink($realPath);
+      }
+    }
+    
     respond($result);
     break;
   default:

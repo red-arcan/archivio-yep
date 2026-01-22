@@ -2,12 +2,38 @@
 
 header("Content-Type: application/json; charset=utf-8");
 
-$allowedSubjects = require __DIR__ . "/subject_pool.php";
+$rootPath = dirname(__DIR__, 2);
+$indexPath = $rootPath . "/Config/archive_index.json";
+$index = file_exists($indexPath) ? json_decode(file_get_contents($indexPath), true) : ["levels" => []];
+if (!is_array($index)) {
+  $index = ["levels" => []];
+}
+
+$allowedSubjects = [
+  "hs" => [],
+  "uni" => []
+];
+foreach ($index["levels"]["hs"]["subjects"] ?? [] as $subjectItem) {
+  if (!empty($subjectItem["id"])) {
+    $allowedSubjects["hs"][] = $subjectItem["id"];
+  }
+}
+foreach ($index["levels"]["uni"]["subjects"] ?? [] as $subjectItem) {
+  if (!empty($subjectItem["id"])) {
+    $allowedSubjects["uni"][] = $subjectItem["id"];
+  }
+}
+
+if (empty($allowedSubjects["hs"]) && empty($allowedSubjects["uni"]) && file_exists(__DIR__ . "/subject_pool.php")) {
+  $allowedSubjects = require __DIR__ . "/subject_pool.php";
+}
 
 $level = $_POST["level"] ?? "";
 $subject = $_POST["subject"] ?? "";
 $year = $_POST["year"] ?? "";
 $title = trim($_POST["title"] ?? "");
+$tagsRaw = trim($_POST["tags"] ?? "");
+$description = trim($_POST["description"] ?? "");
 $category = trim($_POST["category"] ?? "");
 
 if (!$level || !$subject || empty($_FILES["file"])) {
@@ -77,6 +103,19 @@ function sanitizePdfFilename(string $name): string
   return $safeName . ".pdf";
 }
 
+function parseTags(string $tagsRaw): array
+{
+  if ($tagsRaw === "") {
+    return [];
+  }
+  $parts = preg_split("/[;]+/", $tagsRaw);
+  if (!$parts) {
+    return [];
+  }
+  $tags = array_map("trim", $parts);
+  return array_values(array_filter($tags));
+}
+
 $file = $_FILES["file"];
 if ($file["error"] !== UPLOAD_ERR_OK) {
   echo json_encode(["ok" => false, "error" => "Errore durante l'upload."]);
@@ -92,7 +131,6 @@ if ($fileError) {
 $safeFilename = sanitizePdfFilename($file["name"]);
 $safeName = pathinfo($safeFilename, PATHINFO_FILENAME);
 
-$rootPath = dirname(__DIR__, 2);
 if ($level === "hs") {
   $destinationDir = $rootPath . "/src/Documents/hs/" . $subject . "/" . $year;
 } else {
@@ -132,11 +170,7 @@ if (!empty($_FILES["solution"]["name"])) {
 $relativePath = str_replace($rootPath, "", $destinationPath);
 $relativePath = str_replace("\\", "/", $relativePath);
 
-$indexPath = $rootPath . "/Config/archive_index.json";
-$index = file_exists($indexPath) ? json_decode(file_get_contents($indexPath), true) : ["levels" => []];
-if (!is_array($index)) {
-  $index = ["levels" => []];
-}
+$tags = parseTags($tagsRaw);
 
 if (!isset($index["levels"][$level])) {
   $index["levels"][$level] = [
@@ -186,8 +220,8 @@ if ($level === "hs") {
     "title" => $title !== "" ? $title : $safeName,
     "type" => "PDF",
     "date" => date("Y-m-d"),
-    "tags" => [],
-    "description" => "",
+    "tags" => $tags,
+    "description" => $description,
     "fileUrl" => $relativePath,
     "solutionUrl" => $solutionPath
   ];
@@ -242,8 +276,8 @@ if ($level === "hs") {
     "title" => $title !== "" ? $title : $safeName,
     "type" => "PDF",
     "date" => date("Y-m-d"),
-    "tags" => [],
-    "description" => "",
+    "tags" => $tags,
+    "description" => $description,
     "fileUrl" => $relativePath,
     "solutionUrl" => $solutionPath
   ];
