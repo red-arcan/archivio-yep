@@ -126,10 +126,16 @@
 
   .archive-layout {
     grid-template-columns: 1fr;
+    flex: none;
+    min-height: auto;
   }
 
   .year-sidebar {
     position: static;
+  }
+
+  .archive-main {
+    min-height: auto;
   }
 }
 
@@ -139,5 +145,15 @@
   .archive-topbar {
     padding-left: var(--space-4);
     padding-right: var(--space-4);
+  }
+
+  .archive-main {
+    padding: var(--space-5);
+  }
+
+  /* Mobile-first: let the list grow naturally to avoid cut-offs. */
+  .doc-list {
+    overflow: visible;
+    padding-right: 0;
   }
 }

@@ -37,14 +37,14 @@ function normalize(value) {
 function matchesQuery(text, query) {
   return normalize(text).includes(query);
 }
-
+//RICERCO TUTTI I DOCUMENTI CHE CONTENGONO IL TESTO DEL QUERY NEI TITOLI, DESCRIZIONI O TAGS
 function docMatches(doc, query) {
   if (!query) {
     return true;
   }
   return (
     matchesQuery(doc.title, query) ||
-    matchesQuery(doc.type, query) ||
+    matchesQuery(doc.description, query) ||
     doc.tags.some((tag) => matchesQuery(tag, query))
   );
 }
@@ -246,6 +246,10 @@ function renderModal() {
     <div>Tipo: ${doc.type}</div>
     <div>Data: ${doc.date}</div>
     <div>${label}: ${doc.yearName || ""}</div>
+    <div>
+      ID: ${doc.id}
+      <button class="btn ghost" type="button" data-copy-id="${doc.id}">Copia ID</button>
+    </div>
   `;
   elements.modalTags.innerHTML = doc.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
   elements.modalDescription.textContent = doc.description || "Nessuna descrizione disponibile.";
@@ -301,6 +305,42 @@ function handleDetails(event) {
   renderModal();
 }
 
+async function handleCopyId(event) {
+  const target = event.target.closest("[data-copy-id]");
+  if (!target) {
+    return;
+  }
+  const value = target.dataset.copyId || "";
+  if (!value) {
+    return;
+  }
+
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(value);
+    } else {
+      const temp = document.createElement("textarea");
+      temp.value = value;
+      temp.setAttribute("readonly", "");
+      temp.style.position = "absolute";
+      temp.style.left = "-9999px";
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      document.body.removeChild(temp);
+    }
+    const originalText = target.textContent;
+    target.textContent = "Copiato";
+    target.disabled = true;
+    setTimeout(() => {
+      target.textContent = originalText;
+      target.disabled = false;
+    }, 1500);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 function handleModalClose(event) {
   if (!event.target.closest("[data-modal-close]")) {
     return;
@@ -333,6 +373,10 @@ async function init() {
   }
   elements.searchInput.addEventListener("input", handleSearch);
   document.addEventListener("click", (event) => {
+    if (event.target.closest("[data-copy-id]")) {
+      handleCopyId(event);
+      return;
+    }
     if (event.target.closest("[data-doc-id]")) {
       handleDetails(event);
       return;

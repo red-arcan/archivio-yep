@@ -220,11 +220,11 @@ class GestoreDocumenti
     $category = null;
 
     if ($level === "hs") {
-      foreach ($this->index["levels"]["hs"]["subjects"] as &$subjectRef) {
-        if ($subjectRef["id"] !== $subjectId) {
+      foreach ($this->index["levels"]["hs"]["subjects"] as $subjectIndex => $subjectRef) {
+        if (($subjectRef["id"] ?? "") !== $subjectId) {
           continue;
         }
-        foreach ($subjectRef["years"] as &$yearRef) {
+        foreach ($subjectRef["years"] as $yearIndex => $yearRef) {
           $docs = $yearRef["documents"] ?? [];
           $newDocs = [];
           foreach ($docs as $doc) {
@@ -237,15 +237,15 @@ class GestoreDocumenti
             }
             $newDocs[] = $doc;
           }
-          $yearRef["documents"] = $newDocs;
+          $this->index["levels"]["hs"]["subjects"][$subjectIndex]["years"][$yearIndex]["documents"] = $newDocs;
         }
       }
     } else {
-      foreach ($this->index["levels"]["uni"]["subjects"] as &$subjectRef) {
-        if ($subjectRef["id"] !== $subjectId) {
+      foreach ($this->index["levels"]["uni"]["subjects"] as $subjectIndex => $subjectRef) {
+        if (($subjectRef["id"] ?? "") !== $subjectId) {
           continue;
         }
-        foreach ($subjectRef["categories"] ?? [] as &$categoryRef) {
+        foreach ($subjectRef["categories"] ?? [] as $categoryIndex => $categoryRef) {
           $docs = $categoryRef["documents"] ?? [];
           $newDocs = [];
           foreach ($docs as $doc) {
@@ -258,7 +258,7 @@ class GestoreDocumenti
             }
             $newDocs[] = $doc;
           }
-          $categoryRef["documents"] = $newDocs;
+          $this->index["levels"]["uni"]["subjects"][$subjectIndex]["categories"][$categoryIndex]["documents"] = $newDocs;
         }
       }
     }
@@ -275,6 +275,81 @@ class GestoreDocumenti
       "solutionUrl" => $solutionUrl,
       "year" => $year,
       "category" => $category
+    ];
+  }
+
+  public function removeDocumentById(string $docId): array
+  {
+    $removed = false;
+    $fileUrl = null;
+    $solutionUrl = null;
+    $level = null;
+    $subjectId = null;
+    $year = null;
+    $category = null;
+
+    foreach ($this->index["levels"]["hs"]["subjects"] as $subjectIndex => $subjectRef) {
+      foreach ($subjectRef["years"] as $yearIndex => $yearRef) {
+        $docs = $yearRef["documents"] ?? [];
+        $newDocs = [];
+        foreach ($docs as $doc) {
+          if ($doc["id"] === $docId) {
+            $removed = true;
+            $level = "hs";
+            $subjectId = $subjectRef["id"] ?? null;
+            $year = $yearRef["id"] ?? null;
+            $fileUrl = $doc["fileUrl"] ?? null;
+            $solutionUrl = $doc["solutionUrl"] ?? null;
+            $doc["p"] = 0;
+          }
+          $newDocs[] = $doc;
+        }
+        $this->index["levels"]["hs"]["subjects"][$subjectIndex]["years"][$yearIndex]["documents"] = $newDocs;
+        if ($removed) {
+          break 2;
+        }
+      }
+    }
+
+    if (!$removed) {
+      foreach ($this->index["levels"]["uni"]["subjects"] as $subjectIndex => $subjectRef) {
+        foreach ($subjectRef["categories"] ?? [] as $categoryIndex => $categoryRef) {
+          $docs = $categoryRef["documents"] ?? [];
+          $newDocs = [];
+          foreach ($docs as $doc) {
+            if ($doc["id"] === $docId) {
+              $removed = true;
+              $level = "uni";
+              $subjectId = $subjectRef["id"] ?? null;
+              $category = $categoryRef["id"] ?? null;
+              $fileUrl = $doc["fileUrl"] ?? null;
+              $solutionUrl = $doc["solutionUrl"] ?? null;
+              $doc["p"] = 0;
+            }
+            $newDocs[] = $doc;
+          }
+          $this->index["levels"]["uni"]["subjects"][$subjectIndex]["categories"][$categoryIndex]["documents"] = $newDocs;
+          if ($removed) {
+            break 2;
+          }
+        }
+      }
+    }
+
+    if (!$removed) {
+      return ["success" => false, "message" => "Documento non trovato."];
+    }
+
+    $this->saveIndex($this->index);
+
+    return [
+      "success" => true,
+      "level" => $level,
+      "subjectId" => $subjectId,
+      "year" => $year,
+      "category" => $category,
+      "fileUrl" => $fileUrl,
+      "solutionUrl" => $solutionUrl
     ];
   }
 

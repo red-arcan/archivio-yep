@@ -108,7 +108,8 @@ function parseTags(string $tagsRaw): array
   if ($tagsRaw === "") {
     return [];
   }
-  $parts = preg_split("/[;]+/", $tagsRaw);
+  // Gestisce virgole e spazi: "c, f, d,t , y" -> ["c", "f", "d", "t", "y"]
+  $parts = preg_split("/[,]+/", $tagsRaw);
   if (!$parts) {
     return [];
   }
@@ -142,6 +143,10 @@ if (!is_dir($destinationDir)) {
 }
 
 $destinationPath = $destinationDir . "/" . $safeFilename;
+if (file_exists($destinationPath)) {
+  echo json_encode(["ok" => false, "error" => "Esiste gia un PDF con lo stesso nome nella cartella di destinazione. Rinominare il file per aggiungerlo."]);
+  exit;
+}
 if (!move_uploaded_file($file["tmp_name"], $destinationPath)) {
   echo json_encode(["ok" => false, "error" => "Salvataggio file non riuscito."]);
   exit;
@@ -158,6 +163,10 @@ if (!empty($_FILES["solution"]["name"])) {
 
   $solutionFilename = sanitizePdfFilename($solutionFile["name"]);
   $solutionDestination = $destinationDir . "/" . $solutionFilename;
+  if (file_exists($solutionDestination)) {
+    echo json_encode(["ok" => false, "error" => "La soluzione esiste gia nella cartella di destinazione. Rinominare il file per aggiungerlo."]);
+    exit;
+  }
   if (!move_uploaded_file($solutionFile["tmp_name"], $solutionDestination)) {
     echo json_encode(["ok" => false, "error" => "Salvataggio soluzione non riuscito."]);
     exit;

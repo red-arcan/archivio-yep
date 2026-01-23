@@ -4,6 +4,7 @@ const adminStatus = document.getElementById("adminStatus");
 const logoutButton = document.getElementById("logoutButton");
 const uploadForm = document.getElementById("uploadForm");
 const deleteForm = document.getElementById("deleteForm");
+const deleteByIdForm = document.getElementById("deleteByIdForm");
 
 const uploadLevel = document.getElementById("uploadLevel");
 const uploadSubject = document.getElementById("uploadSubject");
@@ -18,12 +19,71 @@ const deleteYearField = document.getElementById("deleteYearField");
 const deleteCategoryField = document.getElementById("deleteCategoryField");
 const deleteCategory = document.getElementById("deleteCategory");
 const deleteDocument = document.getElementById("deleteDocument");
+const deleteDocId = document.getElementById("deleteDocId");
+const uploadTitle = uploadForm.querySelector('input[name="title"]');
+const uploadFile = uploadForm.querySelector('input[name="file"]');
+const uploadSubmit = uploadForm.querySelector('button[type="submit"]');
+const deleteSubmit = deleteForm.querySelector('button[type="submit"]');
+const deleteByIdSubmit = deleteByIdForm.querySelector('button[type="submit"]');
 
 let levelsData = null;
 
+function isFilled(value) {
+  return Boolean(value && value.trim());
+}
+
+function updateUploadSubmitState() {
+  const level = uploadLevel.value;
+  const subject = uploadSubject.value;
+  const titleOk = isFilled(uploadTitle.value);
+  const fileOk = uploadFile.files && uploadFile.files.length > 0;
+  let locationOk = isFilled(level) && isFilled(subject);
+
+  if (level === "hs") {
+    locationOk = locationOk && isFilled(uploadYear.value);
+  } else if (level === "uni") {
+    locationOk = locationOk && isFilled(uploadCategory.value);
+  }
+
+  uploadSubmit.disabled = !(titleOk && fileOk && locationOk);
+}
+
+function updateDeleteSubmitState() {
+  deleteSubmit.disabled = !isFilled(deleteDocument.value);
+}
+
+function updateDeleteByIdSubmitState() {
+  deleteByIdSubmit.disabled = !isFilled(deleteDocId.value);
+}
+
 function setStatus(message, isError = false) {
   adminStatus.textContent = message;
-  adminStatus.style.color = isError ? "#b42318" : "";
+  if (isError) {
+    adminStatus.style.color = "#b42318";
+    adminStatus.style.backgroundColor = "#fee4e2";
+    adminStatus.style.border = "1px solid #b42318";
+    adminStatus.style.padding = "var(--space-3) var(--space-4)";
+    adminStatus.style.borderRadius = "0";
+  } else if (message) {
+    adminStatus.style.color = "#00a887";
+    adminStatus.style.backgroundColor = "#e0f7f4";
+    adminStatus.style.border = "1px solid #00a887";
+    adminStatus.style.padding = "var(--space-3) var(--space-4)";
+    adminStatus.style.borderRadius = "0";
+  } else {
+    adminStatus.style.color = "";
+    adminStatus.style.backgroundColor = "";
+    adminStatus.style.border = "";
+    adminStatus.style.padding = "";
+  }
+
+  if (message) {
+    if (!adminStatus.hasAttribute("tabindex")) {
+      adminStatus.setAttribute("tabindex", "-1");
+    }
+    adminStatus.scrollIntoView({ behavior: "smooth", block: "start" });
+    adminStatus.focus({ preventScroll: true });
+  }
 }
 
 async function requireLogin() {
@@ -111,44 +171,66 @@ function handleLevelChange(levelSelect, subjectSelect, yearSelect, yearField, ca
       if (categorySelect) categorySelect.required = true;
     }
   }
+
+  updateUploadSubmitState();
+  updateDeleteSubmitState();
+  updateDeleteByIdSubmitState();
 }
 
 async function handleUpload(event) {
   event.preventDefault();
   setStatus("");
 
+  const submitButton = uploadForm.querySelector('button[type="submit"]');
+  const originalButtonText = submitButton.textContent;
   const formData = new FormData(uploadForm);
 
-  const response = await fetch("src/Class/upload_file.php", {
-    method: "POST",
-    body: formData,
-    credentials: "same-origin"
-  });
-  const data = await response.json();
+  // Disabilita il bottone e mostra loading
+  submitButton.disabled = true;
+  submitButton.innerHTML = '<span class="spinner"></span> Caricamento...';
 
-  if (!data.ok) {
-    setStatus(data.error || "Errore durante l'upload.", true);
-    return;
+  try {
+    const response = await fetch("src/Class/upload_file.php", {
+      method: "POST",
+      body: formData,
+      credentials: "same-origin"
+    });
+    const data = await response.json();
+
+    if (!data.ok) {
+      setStatus(data.error || "Errore durante l'upload.", true);
+      return;
+    }
+
+    setStatus("Upload completato con successo!");
+    uploadForm.reset();
+    handleLevelChange(uploadLevel, uploadSubject, uploadYear, uploadYearField, uploadCategoryField, uploadCategory);
+    updateUploadSubmitState();
+  } catch (error) {
+    setStatus("Errore di connessione durante l'upload.", true);
+  } finally {
+    // Riabilita il bottone
+    submitButton.textContent = originalButtonText;
+    updateUploadSubmitState();
   }
-
-  setStatus("Upload completato.");
-  uploadForm.reset();
-  handleLevelChange(uploadLevel, uploadSubject, uploadYear, uploadYearField, uploadCategoryField, uploadCategory);
 }
 
 async function loadDocuments(level, subjectId, year, category, documentSelect) {
   if (!level || !subjectId) {
     documentSelect.innerHTML = '<option value="">Seleziona un documento...</option>';
+    updateDeleteSubmitState();
     return;
   }
 
   if (level === "hs" && !year) {
     documentSelect.innerHTML = '<option value="">Seleziona un documento...</option>';
+    updateDeleteSubmitState();
     return;
   }
 
   if (level === "uni" && !category) {
     documentSelect.innerHTML = '<option value="">Seleziona un documento...</option>';
+    updateDeleteSubmitState();
     return;
   }
 
@@ -161,6 +243,7 @@ async function loadDocuments(level, subjectId, year, category, documentSelect) {
 
     if (!data.success || !data.documents) {
       documentSelect.innerHTML = '<option value="">Nessun documento trovato</option>';
+      updateDeleteSubmitState();
       return;
     }
 
@@ -173,16 +256,19 @@ async function loadDocuments(level, subjectId, year, category, documentSelect) {
 
     if (filteredDocs.length === 0) {
       documentSelect.innerHTML = '<option value="">Nessun documento trovato</option>';
+      updateDeleteSubmitState();
       return;
     }
 
     documentSelect.innerHTML = '<option value="">Seleziona un documento...</option>' +
       filteredDocs.map(doc => 
-        `<option value="${doc.id}" data-title="${(doc.title || '').replace(/"/g, '&quot;')}" data-tags="${(doc.tags || []).join(';')}" data-description="${(doc.description || '').replace(/"/g, '&quot;')}">${doc.title || doc.id}</option>`
+        `<option value="${doc.id}" data-title="${(doc.title || '').replace(/"/g, '&quot;')}" data-tags="${(doc.tags || []).join(',')}" data-description="${(doc.description || '').replace(/"/g, '&quot;')}">${doc.title || doc.id}</option>`
       ).join("");
+    updateDeleteSubmitState();
   } catch (error) {
     setStatus("Errore nel caricamento dei documenti.", true);
     documentSelect.innerHTML = '<option value="">Errore nel caricamento</option>';
+    updateDeleteSubmitState();
   }
 }
 
@@ -207,29 +293,95 @@ async function handleDelete(event) {
     return;
   }
 
+  const submitButton = deleteForm.querySelector('button[type="submit"]');
+  const originalButtonText = submitButton.textContent;
+
+  // Disabilita il bottone e mostra loading
+  submitButton.disabled = true;
+  submitButton.innerHTML = '<span class="spinner"></span> Eliminazione...';
+
   const formData = new FormData();
   formData.append("action", "remove");
   formData.append("level", level);
   formData.append("subjectId", subjectId);
   formData.append("docId", docId);
 
-  const response = await fetch(API_URL, {
-    method: "POST",
-    body: formData,
-    credentials: "same-origin"
-  });
-  const data = await response.json();
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      body: formData,
+      credentials: "same-origin"
+    });
+    const data = await response.json();
 
-  if (!data.success) {
-    setStatus(data.message || "Errore durante l'eliminazione.", true);
+    if (!data.success) {
+      setStatus(data.message || "Errore durante l'eliminazione.", true);
+      return;
+    }
+
+    setStatus("Documento eliminato con successo!");
+    deleteForm.reset();
+    handleLevelChange(deleteLevel, deleteSubject, deleteYear, deleteYearField, deleteCategoryField, deleteCategory);
+    deleteDocument.innerHTML = '<option value="">Seleziona un documento...</option>';
+    await loadDocumentsForDelete();
+    updateDeleteSubmitState();
+  } catch (error) {
+    setStatus("Errore di connessione durante l'eliminazione.", true);
+  } finally {
+    // Riabilita il bottone
+    submitButton.textContent = originalButtonText;
+    updateDeleteSubmitState();
+  }
+}
+
+async function handleDeleteById(event) {
+  event.preventDefault();
+  setStatus("");
+
+  const docId = deleteDocId.value.trim();
+  if (!docId) {
+    setStatus("Inserisci un ID documento valido.", true);
     return;
   }
 
-  setStatus("Documento eliminato con successo.");
-  deleteForm.reset();
-  handleLevelChange(deleteLevel, deleteSubject, deleteYear, deleteYearField, deleteCategoryField, deleteCategory);
-  deleteDocument.innerHTML = '<option value="">Seleziona un documento...</option>';
-  await loadDocumentsForDelete();
+  if (!confirm("Sei sicuro di voler eliminare questo documento?")) {
+    return;
+  }
+
+  const submitButton = deleteByIdForm.querySelector('button[type="submit"]');
+  const originalButtonText = submitButton.textContent;
+
+  submitButton.disabled = true;
+  submitButton.innerHTML = '<span class="spinner"></span> Eliminazione...';
+
+  const formData = new FormData();
+  formData.append("action", "removeById");
+  formData.append("docId", docId);
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      body: formData,
+      credentials: "same-origin"
+    });
+    const data = await response.json();
+
+    if (!data.success) {
+      setStatus(data.message || "Errore durante l'eliminazione.", true);
+      return;
+    }
+
+    setStatus("Documento eliminato con successo!");
+    deleteByIdForm.reset();
+    updateDeleteByIdSubmitState();
+    await loadDocumentsForDelete();
+  } catch (error) {
+    setStatus("Errore di connessione durante l'eliminazione.", true);
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalButtonText;
+    updateDeleteByIdSubmitState();
+  }
 }
 
 async function initAdmin() {
@@ -241,6 +393,9 @@ async function initAdmin() {
   populateYearOptions(deleteYear);
   handleLevelChange(uploadLevel, uploadSubject, uploadYear, uploadYearField, uploadCategoryField, uploadCategory);
   handleLevelChange(deleteLevel, deleteSubject, deleteYear, deleteYearField, deleteCategoryField, deleteCategory);
+  updateUploadSubmitState();
+  updateDeleteSubmitState();
+  updateDeleteByIdSubmitState();
 }
 
 initAdmin();
@@ -248,9 +403,15 @@ initAdmin();
 logoutButton.addEventListener("click", handleLogout);
 uploadForm.addEventListener("submit", handleUpload);
 deleteForm.addEventListener("submit", handleDelete);
+deleteByIdForm.addEventListener("submit", handleDeleteById);
 uploadLevel.addEventListener("change", () =>
   handleLevelChange(uploadLevel, uploadSubject, uploadYear, uploadYearField, uploadCategoryField, uploadCategory)
 );
+uploadSubject.addEventListener("change", updateUploadSubmitState);
+uploadYear.addEventListener("change", updateUploadSubmitState);
+uploadCategory.addEventListener("change", updateUploadSubmitState);
+uploadTitle.addEventListener("input", updateUploadSubmitState);
+uploadFile.addEventListener("change", updateUploadSubmitState);
 deleteLevel.addEventListener("change", () => {
   handleLevelChange(deleteLevel, deleteSubject, deleteYear, deleteYearField, deleteCategoryField, deleteCategory);
   loadDocumentsForDelete();
@@ -264,3 +425,5 @@ deleteYear.addEventListener("change", () => {
 deleteCategory.addEventListener("change", () => {
   loadDocumentsForDelete();
 });
+deleteDocument.addEventListener("change", updateDeleteSubmitState);
+deleteDocId.addEventListener("input", updateDeleteByIdSubmitState);

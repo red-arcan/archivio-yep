@@ -23,6 +23,19 @@ function isLoggedIn(): bool
   return !empty($_SESSION["admin"]);
 }
 
+function deleteFileIfExists(string $rootPath, ?string $url): void
+{
+  if (!$url) {
+    return;
+  }
+  $filePath = $rootPath . DIRECTORY_SEPARATOR . ltrim($url, "/");
+  $realPath = realpath($filePath);
+  $rootReal = realpath($rootPath);
+  if ($realPath && $rootReal && strpos($realPath, $rootReal) === 0 && file_exists($realPath)) {
+    @unlink($realPath);
+  }
+}
+
 switch ($action) {
   case "subjects":
     $levels = $gestore->getSubjectsSummary();
@@ -84,23 +97,28 @@ switch ($action) {
     $fileUrl = $result["fileUrl"] ?? null;
     $solutionUrl = $result["solutionUrl"] ?? null;
     
-    if ($fileUrl) {
-      $filePath = $rootPath . DIRECTORY_SEPARATOR . ltrim($fileUrl, "/");
-      $realPath = realpath($filePath);
-      $rootReal = realpath($rootPath);
-      if ($realPath && $rootReal && strpos($realPath, $rootReal) === 0 && file_exists($realPath)) {
-        @unlink($realPath);
-      }
-    }
-    if ($solutionUrl) {
-      $solutionPath = $rootPath . DIRECTORY_SEPARATOR . ltrim($solutionUrl, "/");
-      $realPath = realpath($solutionPath);
-      $rootReal = realpath($rootPath);
-      if ($realPath && $rootReal && strpos($realPath, $rootReal) === 0 && file_exists($realPath)) {
-        @unlink($realPath);
-      }
-    }
+    deleteFileIfExists($rootPath, $fileUrl);
+    deleteFileIfExists($rootPath, $solutionUrl);
     
+    respond($result);
+    break;
+  case "removeById":
+    if (!isLoggedIn()) {
+      respond(["success" => false, "message" => "Non autorizzato."], 403);
+    }
+    $docId = $_POST["docId"] ?? "";
+    if (!$docId) {
+      respond(["success" => false, "message" => "ID documento mancante."], 400);
+    }
+    $result = $gestore->removeDocumentById($docId);
+    if (!$result["success"]) {
+      respond($result, 404);
+    }
+
+    $rootPath = dirname(__DIR__, 2);
+    deleteFileIfExists($rootPath, $result["fileUrl"] ?? null);
+    deleteFileIfExists($rootPath, $result["solutionUrl"] ?? null);
+
     respond($result);
     break;
   default:

@@ -219,6 +219,7 @@ h1 {
   box-shadow: var(--shadow-sm);
   display: grid;
   gap: var(--space-3);
+  min-width: 0;
 }
 
 .doc-header {
@@ -232,6 +233,7 @@ h1 {
 .doc-title {
   font-size: 1.05rem;
   font-weight: var(--font-bold);
+  word-break: break-word;
 }
 
 .doc-meta {
@@ -451,6 +453,33 @@ h1 {
   min-height: 1.2em;
   color: var(--color-muted);
   font-size: 0.85rem;
+  margin-bottom: var(--space-3);
+  transition: all var(--transition);
+}
+
+/* Spinner di caricamento */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  vertical-align: middle;
+  margin-right: var(--space-2);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 @media (max-width: 1024px) {
@@ -466,5 +495,36 @@ h1 {
 @media (max-width: 720px) {
   .subject-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Mobile-first: stack doc header and stretch actions for better tap targets. */
+  .archive-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search {
+    width: 100%;
+  }
+
+  .doc-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .actions .btn {
+    flex: 1 1 calc(50% - var(--space-2));
+    justify-content: center;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .doc-card {
+    padding: var(--space-4);
   }
 }

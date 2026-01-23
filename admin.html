@@ -69,12 +69,12 @@
           </div>
           <div class="form-row">
             <label class="form-field">
-              <span>Titolo (opzionale)</span>
-              <input type="text" name="title" placeholder="Titolo documento">
+              <span>Titolo</span>
+              <input type="text" name="title" placeholder="Titolo documento" required>
             </label>
             <label class="form-field">
-              <span>Tag (separati da ;)</span>
-              <input type="text" name="tags" placeholder="esempio: algebra;integrali;esame">
+              <span>Tag (separati da ,)</span>
+              <input type="text" name="tags" placeholder="esempio: c, f, d, t, y">
             </label>
           </div>
           <label class="form-field">
@@ -91,11 +91,11 @@
               <input type="file" name="solution" accept=".pdf">
             </label>
           </div>
-          <button class="btn primary" type="submit">Upload</button>
+          <button class="btn primary" type="submit" disabled>Upload</button>
         </form>
 
         <form class="admin-card admin-form" id="deleteForm">
-          <h3>Elimina Documento</h3>
+          <h3>Elimina Documento (selezione)</h3>
           <div class="form-row">
             <label class="form-field">
               <span>Sezione</span>
@@ -129,7 +129,18 @@
               </select>
             </label>
           </div>
-          <button class="btn ghost" type="submit">Elimina Documento</button>
+          <button class="btn primary" type="submit" disabled>Elimina Documento</button>
+        </form>
+
+        <form class="admin-card admin-form" id="deleteByIdForm">
+          <h3>Elimina Documento (ID)</h3>
+          <div class="form-row">
+            <label class="form-field">
+              <span>ID documento</span>
+              <input type="text" name="docId" id="deleteDocId" placeholder="es: analisi1-1769107733" required>
+            </label>
+          </div>
+          <button class="btn primary" type="submit" disabled>Elimina Documento</button>
         </form>
       </div>
     </main>
