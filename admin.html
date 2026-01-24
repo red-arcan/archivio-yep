@@ -21,16 +21,7 @@
       <div>
         <p class="eyebrow">Gestione archivio</p>
         <h1>Area Admin</h1>
-        <p class="subtitle-admin">Aggiunta di un docuemnto:</p>
-        <p class="subtitle">Le regole sono le seguenti:</p>
-        <p class="subtitle">1. Ogni file PDF deve avere un nome univoco. (esempio: integrali_1.pdf)</p>
-        <p class="subtitle">2. Ogni file PDF soluzione associata, deve avere un nome univoco e contenere nel nome del PDF la parola "soluzione" (esempio: soluzione_integrali_1.pdf)</p>
-        <p class="subtitle">3. Ogni titolo che dai alla sezione alla creazione deve essere univoco. (esempio: Integrali di Analisi 1)</p>
-        <br>
-        <p class="subtitle-admin">Eliminazione di un documento:</p>
-        <p class="subtitle">La eleminazione di un docuemnto può avvenire in due modi:</p>
-        <p class="subtitle">1. Selezioni l'id del documento dalla lista dei documenti nella sezione "Dettagli"  e lo inserisci nel campo "ID documento" della sezione "Elimina Documento (ID)"</p>
-        <p class="subtitle">2. Selezioni il documento nella sezione "Elimina Documento (selezione)"</p>
+        
       </div>
       <div class="admin-actions">
         <a class="back-link" href="index.html">
@@ -44,7 +35,31 @@
     <main class="admin-panel">
       <p class="form-status" id="adminStatus" role="status"></p>
 
+      <section class="admin-card admin-form instructions-card">
+        <h3>Istruzioni importanti per L'utilizzo</h3>
+        <h4>Aggiunta di un docuemnto:</h4>
+
+        <p>Le regole sono  le seguenti:</p>
+        <p >1. Puoi caricare solo file in formato PDF</p>
+        <p>2. Per caricare un documento devi caricare almeno il file PDF principale con i campi obbligatori e se vuoi la soluzione (non puoi caricare solo la soluzione)</p>
+        <p>3. Ogni file PDF principale (es: integrali_1.pdf) deve avere un nome univoco SOLO nella sezione selezionata:</p>
+        <ul class="bullet-list">
+         <li><p> Scuola:  la sezione è identificata dal singolo anno all'interno della materia (Es: 1 Anno di Matematica, non possono esserci due addizioni_1.pdf in 1 Anno Matematica)</p></li>
+          <li><p>  Università:  la sezione è identificata dalla materia (Es: Analisi 1, non possono esserci due integrali_1.pdf in Analisi 1)</p></li>
+        </ul>
+        <p>4. Ogni titolo che dai al documento (Es: Integrali Prima Prova) deve essere univoco SOLO nella sezione selezionata</p>
+        <p>5. Ogni file PDF soluzione associata, deve avere un nome univoco SOLO all'interno della sezione selezionata e contenere nel nome del PDF la parola "soluzione" (esempio: soluzione_integrali_1.pdf)</p>
+        <p>EVENTUALI ERRORI SARANNO VISUALIZZATI A SCHERMO</p>     
+        <br>      
+        <h4>Eliminazione di un documento:</h4>
+        <p>La eleminazione di un docuemnto può avvenire in due modi:</p>
+        <p>1. Selezioni l'id del documento dalla lista dei documenti nella sezione "Dettagli"  e lo inserisci nel campo "ID documento" della sezione "Elimina Documento (ID)"</p>
+        <p>2. Selezioni il documento nella sezione "Elimina Documento (selezione)"</p>
+      </section>
+
       <div class="admin-forms">
+        
+
         <form class="admin-card admin-form" id="uploadForm">
           <h3>Carica PDF</h3>
           <div class="form-row">
@@ -88,7 +103,7 @@
           </label>
           <div class="form-row">
             <label class="form-field">
-              <span>PDF <span class="required-mark">*</span></span>
+              <span>Principale PDF<span class="required-mark">*</span></span>
               <input type="file" name="file" accept=".pdf" required>
             </label>
             <label class="form-field">

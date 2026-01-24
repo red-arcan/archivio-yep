@@ -1,0 +1,439 @@
+DOCUMENTAZIONE - Archivio Documenti
+=====================================
+
+LE PAGINE
+---------
+- index.html: la home, dove vedi le materie divise tra Scuole Superiori e Universita
+- archive.html: l'archivio vero e proprio, con filtri per anno, ricerca e lista documenti
+- login.html: per entrare nell'area admin
+- admin.html: da qui carichi, modifichi ed elimini i PDF
+
+
+DOVE STANNO I DATI
+------------------
+- Tutto sta in Config/archive_index.json, il DB in locale
+- I PDF stanno nelle cartelle:
+  - /src/Documents/hs/<materia>/<anno>/  per le superiori
+  - /src/Documents/uni/<materia>/        per l'universita
+- Le soluzioni sono documenti a parte collegati ad un pdf principale: se esiste un file tipo "prova_1_soluzione.pdf" 
+  viene automaticamente collegato al documento "prova_1.pdf" al caricamento
+
+POLITICHE DI INSERIMENTO:
+-------------------------
+- In una cartella NON possono stare due docuemnti con lo stesso nome del file o con lo stesso titolo
+- In cartelle diverse possono essere presenti più documenti con lo stesso titolo o nome di file
+- E' possibile caricare solo PDF
+
+=============================================================================
+API - COME CHIAMARE api.php
+=============================================================================
+Raccordo di tutti gli end point chiamabili per la gestione dei documenti, li chiamo da fetch
+dai vari JS così tutto responsive.
+Si trova in: src/Class/api.php
+
+Per chiamarlo aggiungi il parametro "action" nella query string (GET) o nel body (POST) e poi 
+ci sono vari parametri.
+
+
+-----------------------------------------------------------------------------
+1) SUBJECTS - Ottieni la lista delle materie
+-----------------------------------------------------------------------------
+URL: api.php?action=subjects
+Metodo: GET
+
+Cosa fa: 
+  Chiama GestoreDocumenti->getSubjectsSummary() che ti restituisce tutte le materie
+  divise per livello (hs e uni), con nome, icona e conteggio risorse (legge il json e ritorna quello che trova )
+
+Risposta OK:
+{
+  "success": true,
+  "levels": {
+    "hs": {
+      "id": "hs",
+      "name": "Scuole Superiori",
+      "subjects": [
+        {
+          "id": "matematica",
+          "name": "Matematica",
+          "topics": "Algebra, Geometria...",
+          "icon": "grid",
+          "resourceCount": 15
+        }
+      ]
+    },
+    "uni": { ... }
+  }
+}
+
+
+-----------------------------------------------------------------------------
+2) DOCUMENTS - Ottieni i documenti di una materia
+-----------------------------------------------------------------------------
+URL: api.php?action=documents&level=hs&subject=matematica
+Metodo: GET
+
+Parametri:
+  - level: "hs" oppure "uni"
+  - subject: l'id della materia (es. "matematica", "fisica", ecc.)
+
+Cosa fa:
+  Chiama GestoreDocumenti->getSubjectData(level, subjectId) che ti da tutti i 
+  documenti di quella materia, organizzati per anno (hs) o categoria (uni) (letti dal JSON)
+
+Risposta OK:
+{
+  "success": true,
+  "subject": {
+    "id": "matematica",
+    "name": "Matematica",
+    "topics": "Algebra, Geometria...",
+    "icon": "grid"
+  },
+  "years": [
+    { "id": "1", "name": "1° Anno" },
+    { "id": "2", "name": "2° Anno" }
+  ],
+  "documents": [
+    {
+      "id": "matematica-1234567890",
+      "title": "Compito Algebra",
+      "type": "PDF",
+      "date": "2024-03-15",
+      "tags": ["algebra", "equazioni"],
+      "description": "",
+      "fileUrl": "/src/Documents/hs/matematica/1/compito_algebra.pdf",
+      "solutionUrl": "/src/Documents/hs/matematica/1/compito_algebra_soluzione.pdf",
+      "yearId": "1",
+      "yearName": "1° Anno"
+    }
+  ]
+}
+
+Risposta ERRORE (materia non trovata):
+{
+  "success": false,
+  "message": "Materia non trovata."
+}
+
+
+-----------------------------------------------------------------------------
+3) LOGIN - Autenticazione admin
+-----------------------------------------------------------------------------
+URL: api.php?action=login
+Metodo: POST
+
+Parametri POST:
+  - username: il nome utente
+  - password: la password in chiaro
+
+Cosa fa:
+  Confronta le credenziali con quelle in Config/configKey.php (la password e' hashata).
+  Se corrette, imposta $_SESSION["admin"] = true.
+
+Risposta OK:
+{
+  "success": true
+}
+
+Risposta ERRORE:
+{
+  "success": false,
+  "message": "Credenziali non valide."
+}
+
+
+-----------------------------------------------------------------------------
+4) LOGOUT - Esci dall'area admin
+-----------------------------------------------------------------------------
+URL: api.php?action=logout
+Metodo: GET o POST
+
+Cosa fa:
+  Distrugge la sessione e ti manda fuori.
+
+Risposta:
+{
+  "success": true
+}
+
+
+-----------------------------------------------------------------------------
+5) STATUS - Controlla se sei loggato
+-----------------------------------------------------------------------------
+URL: api.php?action=status
+Metodo: GET
+
+Cosa fa:
+  Ti dice se la sessione e' attiva come admin o no.
+
+Risposta:
+{
+  "success": true,
+  "loggedIn": true   // oppure false
+}
+
+
+-----------------------------------------------------------------------------
+6) ADD - Aggiungi un documento al JSON
+-----------------------------------------------------------------------------
+URL: api.php?action=add
+Metodo: POST
+Autenticazione: SI (devi essere loggato)
+
+Parametri POST:
+  - level: "hs" o "uni"
+  - subjectId: l'id della materia
+  - yearId: l'anno (solo per hs, es. "1", "2", ecc.)
+  - filename: nome del file PDF (deve gia esistere nella cartella giusta!)
+  - title: (opzionale) titolo del documento
+  - type: (opzionale) tipo, default "Appunti"
+  - date: (opzionale) data, default oggi
+  - tags: (opzionale) tags separati da virgola
+  - description: (opzionale) descrizione
+
+Cosa fa:
+  Chiama GestoreDocumenti->addDocument(payload) che:
+  1. Verifica che il file esista davvero nel filesystem
+  2. Controlla che non sia un file di soluzione (quelli con _soluzione.pdf)
+  3. Crea l'entry del documento
+  4. Cerca automaticamente se esiste una soluzione (file_soluzione.pdf)
+  5. Aggiunge tutto al JSON
+
+IMPORTANTE: Il file deve gia essere stato caricato! Questa chiamata serve solo per 
+registrarlo nel JSON. Per caricare i file uso upload_file.php.
+
+Risposta OK:
+{
+  "success": true,
+  "document": { ... }
+}
+
+Risposta ERRORE:
+{
+  "success": false,
+  "message": "File non trovato nel filesystem."
+}
+
+
+-----------------------------------------------------------------------------
+7) REMOVE - Rimuovi un documento dal JSON e dal disco
+-----------------------------------------------------------------------------
+URL: api.php?action=remove
+Metodo: POST
+Autenticazione: SI (devi essere loggato)
+
+Parametri POST:
+  - level: "hs" o "uni"
+  - subjectId: l'id della materia
+  - docId: l'id del documento da rimuovere
+
+Cosa fa:
+  1. Chiama GestoreDocumenti->removeDocument(level, subjectId, docId) che:
+     - Cerca il documento nel JSON
+     - Lo rimuove dall'array
+     - Salva il JSON aggiornato
+     - Restituisce fileUrl e solutionUrl del documento rimosso
+  2. Elimina i file fisici dal disco (sia il PDF principale che la soluzione se presente)
+
+Risposta OK:
+{
+  "success": true,
+  "fileUrl": "/src/Documents/hs/matematica/1/file.pdf",
+  "solutionUrl": "/src/Documents/hs/matematica/1/file_soluzione.pdf",
+  "year": "1"
+}
+
+Risposta ERRORE:
+{
+  "success": false,
+  "message": "Documento non trovato."
+}
+
+
+-----------------------------------------------------------------------------
+8) UPDATE - Modifica i metadati di un documento
+-----------------------------------------------------------------------------
+URL: api.php?action=update
+Metodo: POST
+Autenticazione: SI (devi essere loggato)
+
+Parametri POST:
+  - level: "hs" o "uni"
+  - subjectId: l'id della materia
+  - docId: l'id del documento da modificare
+  - title: (opzionale) nuovo titolo
+  - tags: (opzionale) nuovi tag (separati da ;)
+  - description: (opzionale) nuova descrizione
+
+Cosa fa:
+  Chiama GestoreDocumenti->updateDocument(level, subjectId, docId, updates) che:
+  1. Cerca il documento nel JSON
+  2. Aggiorna i campi specificati (title, tags, description)
+  3. Salva il JSON aggiornato
+
+Risposta OK:
+{
+  "success": true,
+  "document": { ... }
+}
+
+Risposta ERRORE:
+{
+  "success": false,
+  "message": "Documento non trovato."
+}
+
+
+=============================================================================
+GESTORE DOCUMENTI - Cosa fa ogni metodo
+=============================================================================
+
+Il file GestoreDocumenti.php (in src/Class/) e' la classe che gestisce tutto il JSON.
+
+Metodi principali:
+
+getSubjectsSummary()
+  Restituisce un riassunto di tutte le materie con il conteggio documenti.
+  Usato dalla home per mostrare le card.
+
+getSubjectData(level, subjectId)
+  Restituisce tutti i dati di una materia: info base, anni/categorie e documenti.
+  Usato dall'archivio per mostrare la lista documenti.
+
+addDocument(payload)
+  Aggiunge un documento al JSON (non carica il file, quello lo fa upload_file.php).
+  Controlla che il file esista, genera un ID univoco, cerca la soluzione automaticamente.
+
+removeDocument(level, subjectId, docId)
+  Rimuove un documento dal JSON.
+  Restituisce fileUrl e solutionUrl per permettere l'eliminazione dei file fisici.
+
+updateDocument(level, subjectId, docId, updates)
+  Modifica i metadati di un documento (title, tags, description).
+  Aggiorna solo i campi specificati nell'array updates.
+
+
+=============================================================================
+UPLOAD E DELETE FILE
+=============================================================================
+
+Per caricare i file dal disco, c'e' uno script separato:
+
+upload_file.php
+  - Riceve il PDF via multipart/form-data
+  - Valida il file (estensione, mime, dimensione max 20MB)
+  - Lo salva nella cartella giusta
+  - Se c'e' anche una soluzione, la salva insieme
+  - Aggiorna il JSON aggiungendo l'entry del documento
+
+NOTA: L'eliminazione dei file fisici
+viene gestita direttamente dall'endpoint "remove" in api.php dopo aver rimosso
+il documento dal JSON tramite GestoreDocumenti->removeDocument().
+
+
+=============================================================================
+FLUSSO TIPICO
+=============================================================================
+
+1. Utente apre index.html
+   -> JS chiama api.php?action=subjects
+   -> Mostra le card delle materie
+
+2. Utente clicca su una materia
+   -> Apre archive.html?level=hs&subject=matematica
+   -> JS chiama api.php?action=documents&level=hs&subject=matematica
+   -> Mostra i documenti filtrabili per anno
+
+3. Admin fa login
+   -> POST a api.php?action=login con username e password
+   -> Se ok, redirect a admin.html
+
+4. Admin carica un PDF
+   -> POST multipart a upload_file.php con:
+      - level, subject, year/category
+      - file (PDF principale)
+      - solution (PDF soluzione, opzionale)
+      - title, tags, description (opzionali)
+   -> upload_file.php:
+      - Valida e salva i file nel filesystem
+      - Aggiorna il JSON aggiungendo l'entry del documento
+   -> File salvato + JSON aggiornato
+
+5. Admin modifica un documento
+   -> Seleziona sezione, materia, anno/categoria nel form "Modifica Documento"
+   -> Seleziona il documento dalla lista dinamica
+   -> I campi (titolo, tag, descrizione) si popolano automaticamente
+   -> Modifica i campi desiderati
+   -> POST a api.php?action=update con:
+      - level, subjectId, docId
+      - title, tags, description (solo quelli modificati)
+   -> api.php chiama GestoreDocumenti->updateDocument()
+   -> JSON aggiornato
+
+6. Admin elimina un documento
+   -> Seleziona sezione, materia, anno/categoria nel form "Elimina Documento"
+   -> Seleziona il documento dalla lista dinamica
+   -> POST a api.php?action=remove con:
+      - level, subjectId, docId
+   -> api.php:
+      - Chiama GestoreDocumenti->removeDocument() per rimuovere dal JSON
+      - Elimina i file fisici (PDF principale e soluzione se presente)
+   -> File rimosso dal disco + JSON aggiornato
+
+
+=============================================================================
+FILE NON PIU' UTILIZZATI
+=============================================================================
+
+delete_file.php
+  - File legacy non più utilizzato
+  - L'eliminazione dei file fisici è ora gestita direttamente dall'endpoint
+    "remove" in api.php dopo la rimozione dal JSON
+  - Può essere rimosso se non serve più per compatibilità
+
+
+=============================================================================
+ARCHITETTURA E FLUSSI DETTAGLIATI
+=============================================================================
+
+CHI CHIAMA CHI:
+
+1. AGGIUNTA DOCUMENTO:
+   admin.html (form uploadForm)
+   -> admin.js (handleUpload)
+   -> upload_file.php
+      -> GestoreDocumenti->addDocument() [NON chiamato, upload_file.php aggiorna direttamente il JSON]
+   -> File salvato + JSON aggiornato
+
+2. MODIFICA DOCUMENTO:
+   admin.html (form editForm)
+   -> admin.js (handleEditSave)
+   -> api.php?action=update
+      -> GestoreDocumenti->updateDocument()
+   -> JSON aggiornato
+
+3. ELIMINAZIONE DOCUMENTO:
+   admin.html (form deleteForm)
+   -> admin.js (handleDelete)
+   -> api.php?action=remove
+      -> GestoreDocumenti->removeDocument() [rimuove dal JSON, restituisce fileUrl/solutionUrl]
+      -> Eliminazione file fisici (stessa logica di delete_file.php)
+   -> File rimosso dal disco + JSON aggiornato
+
+4. VISUALIZZAZIONE DOCUMENTI:
+   archive.html
+   -> archive.js (fetchSubject)
+   -> api.php?action=documents
+      -> GestoreDocumenti->getSubjectData()
+   -> Documenti mostrati all'utente
+
+5. LISTA MATERIE:
+   index.html
+   -> index.js (fetchSubjectsSummary)
+   -> api.php?action=subjects
+      -> GestoreDocumenti->getSubjectsSummary()
+   -> Card materie mostrate
+
+
+Ecco fatto! Se hai dubbi, guarda direttamente il codice dei file che ho citato.

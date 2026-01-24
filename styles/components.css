@@ -381,6 +381,15 @@ h1 {
   gap: var(--space-5);
 }
 
+.instructions-card {
+  border-left: 4px solid var(--accent-blue);
+}
+
+.bullet-list {
+  list-style: disc;
+  margin-left: var(--space-5);
+}
+
 .admin-forms {
   display: grid;
   grid-template-columns: 2fr 1fr;
