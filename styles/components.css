@@ -20,6 +20,12 @@ h1 {
   max-width: 520px;
 }
 
+.subtitle-admin {
+  color: var(--color-black);
+  margin-top: var(--space-2);
+  max-width: 520px;
+}
+
 .header-pill {
   background: rgba(0, 168, 135, 0.12);
   color: var(--accent-teal);
@@ -441,6 +447,32 @@ h1 {
   color: var(--color-ink);
 }
 
+.form-field.field-error {
+  color: #b42318;
+}
+
+.form-field.field-error input,
+.form-field.field-error select,
+.form-field.field-error textarea {
+  border-color: #b42318;
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.15);
+}
+
+.required-mark {
+  color: #b42318;
+  margin-left: 4px;
+}
+
+.required-note {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.required-note.alert {
+  color: #b42318;
+  font-weight: var(--font-bold);
+}
+
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
@@ -452,7 +484,8 @@ h1 {
 .form-status {
   min-height: 1.2em;
   color: var(--color-muted);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: var(--font-bold);
   margin-bottom: var(--space-3);
   transition: all var(--transition);
 }

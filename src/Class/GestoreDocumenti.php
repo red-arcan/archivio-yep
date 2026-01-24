@@ -153,7 +153,7 @@ class GestoreDocumenti
 
     if ($level === "hs") {
       if (!$yearId) {
-        return ["success" => false, "message" => "Anno mancante per il livello HS."];
+        return ["success" => false, "message" => "Anno mancante per il livello Superiori."];
       }
       $updated = false;
       foreach ($this->index["levels"]["hs"]["subjects"] as &$subjectRef) {
@@ -337,7 +337,7 @@ class GestoreDocumenti
     }
 
     if (!$removed) {
-      return ["success" => false, "message" => "Documento non trovato."];
+      return ["success" => false, "message" => "Documento non trovato, verifica che l'ID selezionato sia corretto."];
     }
 
     $this->saveIndex($this->index);

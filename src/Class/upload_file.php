@@ -180,6 +180,22 @@ $relativePath = str_replace($rootPath, "", $destinationPath);
 $relativePath = str_replace("\\", "/", $relativePath);
 
 $tags = parseTags($tagsRaw);
+$finalTitle = $title !== "" ? $title : $safeName;
+
+function titleExists(array $documents, string $title): bool
+{
+  $target = mb_strtolower(trim($title));
+  foreach ($documents as $doc) {
+    if (($doc["p"] ?? 1) === 0) {
+      continue;
+    }
+    $existing = mb_strtolower(trim($doc["title"] ?? ""));
+    if ($existing !== "" && $existing === $target) {
+      return true;
+    }
+  }
+  return false;
+}
 
 if (!isset($index["levels"][$level])) {
   $index["levels"][$level] = [
@@ -224,9 +240,14 @@ if ($level === "hs") {
     $subjectRef["years"][] = &$yearRef;
   }
 
+  if (titleExists($yearRef["documents"], $finalTitle)) {
+    echo json_encode(["ok" => false, "error" => "Esiste gia un documento con lo stesso titolo. Rinominare il titolo per aggiungerlo."]);
+    exit;
+  }
+
   $yearRef["documents"][] = [
     "id" => $subject . "-" . time(),
-    "title" => $title !== "" ? $title : $safeName,
+    "title" => $finalTitle,
     "type" => "PDF",
     "date" => date("Y-m-d"),
     "tags" => $tags,
@@ -282,7 +303,7 @@ if ($level === "hs") {
 
   $docData = [
     "id" => $subject . "-" . time(),
-    "title" => $title !== "" ? $title : $safeName,
+    "title" => $finalTitle,
     "type" => "PDF",
     "date" => date("Y-m-d"),
     "tags" => $tags,
@@ -298,6 +319,10 @@ if ($level === "hs") {
   $added = false;
   foreach ($subjectRef["categories"] as &$categoryRef) {
     if ($categoryRef["id"] === $targetCategory) {
+      if (titleExists($categoryRef["documents"], $finalTitle)) {
+        echo json_encode(["ok" => false, "error" => "Esiste gia un documento con lo stesso titolo. Rinominare il titolo per aggiungerlo."]);
+        exit;
+      }
       $categoryRef["documents"][] = $docData;
       $added = true;
       break;
@@ -308,6 +333,10 @@ if ($level === "hs") {
   if (!$added) {
     foreach ($subjectRef["categories"] as &$categoryRef) {
       if ($categoryRef["id"] === "Esami") {
+        if (titleExists($categoryRef["documents"], $finalTitle)) {
+          echo json_encode(["ok" => false, "error" => "Esiste gia un documento con lo stesso titolo. Rinominare il titolo per aggiungerlo."]);
+          exit;
+        }
         $categoryRef["documents"][] = $docData;
         break;
       }

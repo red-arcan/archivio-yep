@@ -21,11 +21,16 @@
       <div>
         <p class="eyebrow">Gestione archivio</p>
         <h1>Area Admin</h1>
-        <p class="subtitle">Aggiungi o rimuovi documenti</p>
+        <p class="subtitle-admin">Aggiunta di un docuemnto:</p>
         <p class="subtitle">Le regole sono le seguenti:</p>
-        <p class="subtitle">1. Ogni PDF deve avere un nome univoco. (esempio: prova_1.pdf)</p>
-        <p class="subtitle">2. Ogni soluzione associata deve avere un nome univoco e contenere nel nome del PDF la parola "soluzione" (esempio: soluzione_prova_1.pdf)</p>
-        <p class="subtitle">3. Per eliminare il file inserire il nome del file completo (esempio: prova_1.pdf), la soluzione e eliminata automaticamente.</p>
+        <p class="subtitle">1. Ogni file PDF deve avere un nome univoco. (esempio: integrali_1.pdf)</p>
+        <p class="subtitle">2. Ogni file PDF soluzione associata, deve avere un nome univoco e contenere nel nome del PDF la parola "soluzione" (esempio: soluzione_integrali_1.pdf)</p>
+        <p class="subtitle">3. Ogni titolo che dai alla sezione alla creazione deve essere univoco. (esempio: Integrali di Analisi 1)</p>
+        <br>
+        <p class="subtitle-admin">Eliminazione di un documento:</p>
+        <p class="subtitle">La eleminazione di un docuemnto può avvenire in due modi:</p>
+        <p class="subtitle">1. Selezioni l'id del documento dalla lista dei documenti nella sezione "Dettagli"  e lo inserisci nel campo "ID documento" della sezione "Elimina Documento (ID)"</p>
+        <p class="subtitle">2. Selezioni il documento nella sezione "Elimina Documento (selezione)"</p>
       </div>
       <div class="admin-actions">
         <a class="back-link" href="index.html">
@@ -44,23 +49,23 @@
           <h3>Carica PDF</h3>
           <div class="form-row">
             <label class="form-field">
-              <span>Sezione</span>
+              <span>Sezione <span class="required-mark">*</span></span>
               <select name="level" id="uploadLevel" required></select>
             </label>
           </div>
           <div class="form-row">
             <label class="form-field">
-              <span>Materia</span>
+              <span>Materia <span class="required-mark">*</span></span>
               <select name="subject" id="uploadSubject" required></select>
             </label>
             <label class="form-field" id="uploadYearField">
-              <span>Anno (solo Superiori)</span>
+              <span>Anno (solo Superiori) <span class="required-mark">*</span></span>
               <select name="year" id="uploadYear">
                 <option value="">-</option>
               </select>
             </label>
             <label class="form-field" id="uploadCategoryField" style="display: none;">
-              <span>Categoria (solo Universita)</span> <br>
+              <span>Categoria (solo Universita) <span class="required-mark">*</span></span> <br>
               <select name="category" id="uploadCategory">
                 <option value="Esami">Esami</option>
                 <option value="Prove Parziali">Prove Parziali</option>
@@ -69,7 +74,7 @@
           </div>
           <div class="form-row">
             <label class="form-field">
-              <span>Titolo</span>
+              <span>Titolo <span class="required-mark">*</span></span>
               <input type="text" name="title" placeholder="Titolo documento" required>
             </label>
             <label class="form-field">
@@ -83,7 +88,7 @@
           </label>
           <div class="form-row">
             <label class="form-field">
-              <span>PDF</span>
+              <span>PDF <span class="required-mark">*</span></span>
               <input type="file" name="file" accept=".pdf" required>
             </label>
             <label class="form-field">
@@ -91,6 +96,7 @@
               <input type="file" name="solution" accept=".pdf">
             </label>
           </div>
+          <p class="required-note alert" id="uploadRequiredNote"><span class="required-mark">*</span> Compila tutti i campi obbligatori.</p>
           <button class="btn primary" type="submit" disabled>Upload</button>
         </form>
 
@@ -98,23 +104,23 @@
           <h3>Elimina Documento (selezione)</h3>
           <div class="form-row">
             <label class="form-field">
-              <span>Sezione</span>
+              <span>Sezione <span class="required-mark">*</span></span>
               <select name="level" id="deleteLevel" required></select>
             </label>
           </div>
           <div class="form-row">
             <label class="form-field">
-              <span>Materia</span>
+              <span>Materia <span class="required-mark">*</span></span>
               <select name="subject" id="deleteSubject" required></select>
             </label>
             <label class="form-field" id="deleteYearField">
-              <span>Anno (solo Superiori)</span>
+              <span>Anno (solo Superiori) <span class="required-mark">*</span></span>
               <select name="year" id="deleteYear">
                 <option value="">-</option>
               </select>
             </label>
             <label class="form-field" id="deleteCategoryField" style="display: none;">
-              <span>Categoria (solo Universita)</span> <br>
+              <span>Categoria (solo Universita) <span class="required-mark">*</span></span> <br>
               <select name="category" id="deleteCategory">
                 <option value="Esami">Esami</option>
                 <option value="Prove Parziali">Prove Parziali</option>
@@ -123,12 +129,13 @@
           </div>
           <div class="form-row">
             <label class="form-field">
-              <span>Documento</span>
+              <span>Documento <span class="required-mark">*</span></span>
               <select name="document" id="deleteDocument" required>
                 <option value="">Seleziona un documento...</option>
               </select>
             </label>
           </div>
+          <p class="required-note alert" id="deleteRequiredNote"><span class="required-mark">*</span> Compila tutti i campi obbligatori.</p>
           <button class="btn primary" type="submit" disabled>Elimina Documento</button>
         </form>
 
@@ -136,10 +143,11 @@
           <h3>Elimina Documento (ID)</h3>
           <div class="form-row">
             <label class="form-field">
-              <span>ID documento</span>
+              <span>ID documento <span class="required-mark">*</span></span>
               <input type="text" name="docId" id="deleteDocId" placeholder="es: analisi1-1769107733" required>
             </label>
           </div>
+          <p class="required-note alert" id="deleteByIdRequiredNote"><span class="required-mark">*</span> Compila tutti i campi obbligatori.</p>
           <button class="btn primary" type="submit" disabled>Elimina Documento</button>
         </form>
       </div>

@@ -193,7 +193,7 @@ function renderDocs() {
 
   elements.docList.innerHTML = docs
     .map((doc) => {
-      const tags = doc.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+      const tagsText = doc.tags.join(", ");
       const yearLabel = doc.yearName ? `<span class="meta-chip">${doc.yearName}</span>` : "";
       const fileUrl = BASE_PATH + doc.fileUrl;
       const solutionUrl = doc.solutionUrl ? BASE_PATH + doc.solutionUrl : null;
@@ -218,7 +218,7 @@ function renderDocs() {
               <button class="btn ghost" data-action="details" data-doc-id="${doc.id}">Dettagli</button>
             </div>
           </div>
-          <div class="tags">${tags}</div>
+          <div>Tags: ${tagsText || "-"}</div>
         </article>
       `;
     })
@@ -251,7 +251,8 @@ function renderModal() {
       <button class="btn ghost" type="button" data-copy-id="${doc.id}">Copia ID</button>
     </div>
   `;
-  elements.modalTags.innerHTML = doc.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+  const modalTagsText = doc.tags.join(", ");
+  elements.modalTags.textContent = modalTagsText ? `Tags: ${modalTagsText}` : "Tags: -";
   elements.modalDescription.textContent = doc.description || "Nessuna descrizione disponibile.";
 
   elements.modal.classList.add("open");

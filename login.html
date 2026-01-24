@@ -33,13 +33,14 @@
       <form class="admin-card auth-card" id="loginForm">
         <h3>Credenziali</h3>
         <label class="form-field">
-          <span>Username</span>
+          <span>Username <span class="required-mark">*</span></span>
           <input type="text" name="username" required>
         </label>
         <label class="form-field">
-          <span>Password</span>
+          <span>Password <span class="required-mark">*</span></span>
           <input type="password" name="password" required>
         </label>
+        <p class="required-note"><span class="required-mark">*</span> Compila tutti i campi obbligatori.</p>
         <button class="btn primary" type="submit">Accedi</button>
         <p class="form-status" id="loginStatus" role="status"></p>
       </form>

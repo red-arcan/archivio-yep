@@ -20,6 +20,9 @@ const deleteCategoryField = document.getElementById("deleteCategoryField");
 const deleteCategory = document.getElementById("deleteCategory");
 const deleteDocument = document.getElementById("deleteDocument");
 const deleteDocId = document.getElementById("deleteDocId");
+const uploadRequiredNote = document.getElementById("uploadRequiredNote");
+const deleteRequiredNote = document.getElementById("deleteRequiredNote");
+const deleteByIdRequiredNote = document.getElementById("deleteByIdRequiredNote");
 const uploadTitle = uploadForm.querySelector('input[name="title"]');
 const uploadFile = uploadForm.querySelector('input[name="file"]');
 const uploadSubmit = uploadForm.querySelector('button[type="submit"]');
@@ -27,9 +30,67 @@ const deleteSubmit = deleteForm.querySelector('button[type="submit"]');
 const deleteByIdSubmit = deleteByIdForm.querySelector('button[type="submit"]');
 
 let levelsData = null;
+let statusTimeoutId = null;
 
 function isFilled(value) {
   return Boolean(value && value.trim());
+}
+
+function isFieldValid(field) {
+  if (!field.required || field.disabled) {
+    return true;
+  }
+  if (field.type === "file") {
+    return field.files && field.files.length > 0;
+  }
+  return isFilled(field.value || "");
+}
+
+function areRequiredFieldsFilled(form) {
+  const fields = form.querySelectorAll("input, select, textarea");
+  for (const field of fields) {
+    if (!isFieldValid(field)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function updateRequiredNote(form, note) {
+  if (!note) {
+    return;
+  }
+  if (areRequiredFieldsFilled(form)) {
+    note.style.display = "none";
+  } else {
+    note.style.display = "";
+    note.classList.add("alert");
+  }
+}
+
+function updateFieldError(field) {
+  const wrapper = field.closest(".form-field");
+  if (!wrapper) {
+    return;
+  }
+  if (isFieldValid(field)) {
+    wrapper.classList.remove("field-error");
+  } else {
+    wrapper.classList.add("field-error");
+  }
+}
+
+function markRequiredErrors(form) {
+  let hasError = false;
+  form.querySelectorAll("input, select, textarea").forEach((field) => {
+    if (!isFieldValid(field)) {
+      updateFieldError(field);
+      hasError = true;
+    } else {
+      updateFieldError(field);
+    }
+  });
+  return hasError;
 }
 
 function updateUploadSubmitState() {
@@ -46,17 +107,24 @@ function updateUploadSubmitState() {
   }
 
   uploadSubmit.disabled = !(titleOk && fileOk && locationOk);
+  updateRequiredNote(uploadForm, uploadRequiredNote);
 }
 
 function updateDeleteSubmitState() {
   deleteSubmit.disabled = !isFilled(deleteDocument.value);
+  updateRequiredNote(deleteForm, deleteRequiredNote);
 }
 
 function updateDeleteByIdSubmitState() {
   deleteByIdSubmit.disabled = !isFilled(deleteDocId.value);
+  updateRequiredNote(deleteByIdForm, deleteByIdRequiredNote);
 }
 
 function setStatus(message, isError = false) {
+  if (statusTimeoutId) {
+    clearTimeout(statusTimeoutId);
+    statusTimeoutId = null;
+  }
   adminStatus.textContent = message;
   if (isError) {
     adminStatus.style.color = "#b42318";
@@ -83,6 +151,14 @@ function setStatus(message, isError = false) {
     }
     adminStatus.scrollIntoView({ behavior: "smooth", block: "start" });
     adminStatus.focus({ preventScroll: true });
+    statusTimeoutId = setTimeout(() => {
+      adminStatus.textContent = "";
+      adminStatus.style.color = "";
+      adminStatus.style.backgroundColor = "";
+      adminStatus.style.border = "";
+      adminStatus.style.padding = "";
+      statusTimeoutId = null;
+    }, 4000);
   }
 }
 
@@ -180,6 +256,11 @@ function handleLevelChange(levelSelect, subjectSelect, yearSelect, yearField, ca
 async function handleUpload(event) {
   event.preventDefault();
   setStatus("");
+  if (markRequiredErrors(uploadForm)) {
+    setStatus("Compila tutti i campi obbligatori.", true);
+    updateRequiredNote(uploadForm, uploadRequiredNote);
+    return;
+  }
 
   const submitButton = uploadForm.querySelector('button[type="submit"]');
   const originalButtonText = submitButton.textContent;
@@ -279,6 +360,11 @@ async function loadDocumentsForDelete() {
 async function handleDelete(event) {
   event.preventDefault();
   setStatus("");
+  if (markRequiredErrors(deleteForm)) {
+    setStatus("Compila tutti i campi obbligatori.", true);
+    updateRequiredNote(deleteForm, deleteRequiredNote);
+    return;
+  }
 
   const level = deleteLevel.value;
   const subjectId = deleteSubject.value;
@@ -340,7 +426,9 @@ async function handleDeleteById(event) {
 
   const docId = deleteDocId.value.trim();
   if (!docId) {
+    markRequiredErrors(deleteByIdForm);
     setStatus("Inserisci un ID documento valido.", true);
+    updateRequiredNote(deleteByIdForm, deleteByIdRequiredNote);
     return;
   }
 
@@ -412,6 +500,10 @@ uploadYear.addEventListener("change", updateUploadSubmitState);
 uploadCategory.addEventListener("change", updateUploadSubmitState);
 uploadTitle.addEventListener("input", updateUploadSubmitState);
 uploadFile.addEventListener("change", updateUploadSubmitState);
+uploadForm.querySelectorAll("input, select, textarea").forEach((field) => {
+  field.addEventListener("input", () => updateFieldError(field));
+  field.addEventListener("change", () => updateFieldError(field));
+});
 deleteLevel.addEventListener("change", () => {
   handleLevelChange(deleteLevel, deleteSubject, deleteYear, deleteYearField, deleteCategoryField, deleteCategory);
   loadDocumentsForDelete();
@@ -427,3 +519,11 @@ deleteCategory.addEventListener("change", () => {
 });
 deleteDocument.addEventListener("change", updateDeleteSubmitState);
 deleteDocId.addEventListener("input", updateDeleteByIdSubmitState);
+deleteForm.querySelectorAll("input, select, textarea").forEach((field) => {
+  field.addEventListener("input", () => updateFieldError(field));
+  field.addEventListener("change", () => updateFieldError(field));
+});
+deleteByIdForm.querySelectorAll("input, select, textarea").forEach((field) => {
+  field.addEventListener("input", () => updateFieldError(field));
+  field.addEventListener("change", () => updateFieldError(field));
+});
