@@ -21,6 +21,7 @@ const deleteCategory = document.getElementById("deleteCategory");
 const deleteDocument = document.getElementById("deleteDocument");
 const deleteDocId = document.getElementById("deleteDocId");
 const uploadRequiredNote = document.getElementById("uploadRequiredNote");
+const uploadFilenameNote = document.getElementById("uploadFilenameNote");
 const deleteRequiredNote = document.getElementById("deleteRequiredNote");
 const deleteByIdRequiredNote = document.getElementById("deleteByIdRequiredNote");
 const uploadTitle = uploadForm.querySelector('input[name="title"]');
@@ -54,6 +55,10 @@ function areRequiredFieldsFilled(form) {
     }
   }
   return true;
+}
+
+function filenameHasSolutionWord(name) {
+  return name.toLowerCase().includes("soluzione");
 }
 
 function updateRequiredNote(form, note) {
@@ -98,6 +103,12 @@ function updateUploadSubmitState() {
   const subject = uploadSubject.value;
   const titleOk = isFilled(uploadTitle.value);
   const fileOk = uploadFile.files && uploadFile.files.length > 0;
+  const fileName = fileOk ? uploadFile.files[0].name : "";
+  const mainFileOk = fileOk && !filenameHasSolutionWord(fileName);
+  const solutionFile = uploadForm.querySelector('input[name="solution"]');
+  const solutionOk = solutionFile?.files?.length
+    ? filenameHasSolutionWord(solutionFile.files[0].name)
+    : true;
   let locationOk = isFilled(level) && isFilled(subject);
 
   if (level === "hs") {
@@ -106,7 +117,19 @@ function updateUploadSubmitState() {
     locationOk = locationOk && isFilled(uploadCategory.value);
   }
 
-  uploadSubmit.disabled = !(titleOk && fileOk && locationOk);
+  const allOk = titleOk && fileOk && locationOk && mainFileOk && solutionOk;
+  uploadSubmit.disabled = !allOk;
+  if (uploadFilenameNote) {
+    if (fileOk && !mainFileOk) {
+      uploadFilenameNote.textContent = "La soluzione va caricata SOLO a destra con un file Principale associato!";
+      uploadFilenameNote.style.display = "";
+    } else if (solutionFile?.files?.length && !solutionOk) {
+      uploadFilenameNote.textContent = "Il file soluzione deve contenere la parola \"soluzione\" !";
+      uploadFilenameNote.style.display = "";
+    } else {
+      uploadFilenameNote.style.display = "none";
+    }
+  }
   updateRequiredNote(uploadForm, uploadRequiredNote);
 }
 
@@ -158,7 +181,7 @@ function setStatus(message, isError = false) {
       adminStatus.style.border = "";
       adminStatus.style.padding = "";
       statusTimeoutId = null;
-    }, 4000);
+    }, 5000);
   }
 }
 
@@ -259,6 +282,10 @@ async function handleUpload(event) {
   if (markRequiredErrors(uploadForm)) {
     setStatus("Compila tutti i campi obbligatori.", true);
     updateRequiredNote(uploadForm, uploadRequiredNote);
+    return;
+  }
+  if (uploadFilenameNote && uploadFilenameNote.style.display !== "none") {
+    setStatus(uploadFilenameNote.textContent || "Controlla i nomi dei file.", true);
     return;
   }
 
@@ -500,6 +527,7 @@ uploadYear.addEventListener("change", updateUploadSubmitState);
 uploadCategory.addEventListener("change", updateUploadSubmitState);
 uploadTitle.addEventListener("input", updateUploadSubmitState);
 uploadFile.addEventListener("change", updateUploadSubmitState);
+uploadForm.querySelector('input[name="solution"]').addEventListener("change", updateUploadSubmitState);
 uploadForm.querySelectorAll("input, select, textarea").forEach((field) => {
   field.addEventListener("input", () => updateFieldError(field));
   field.addEventListener("change", () => updateFieldError(field));

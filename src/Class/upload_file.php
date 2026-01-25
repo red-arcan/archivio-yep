@@ -64,17 +64,14 @@ if ($level === "hs") {
   $year = "";
 }
 
+$sectionLabel = $level === "hs"
+  ? "Scuola - " . $subject . " - anno " . $year
+  : "Universita - " . $subject;
 
 
 $file = $_FILES["file"];
-if ($file["error"] !== UPLOAD_ERR_OK) {
+if ($file["error"] !== UPLOAD_ERR_OK || !is_uploaded_file($file["tmp_name"])) {
   echo json_encode(["ok" => false, "error" => "Errore durante l'upload."]);
-  exit;
-}
-
-$fileError = validateUploadedPdf($file);
-if ($fileError) {
-  echo json_encode(["ok" => false, "error" => $fileError]);
   exit;
 }
 
@@ -93,46 +90,116 @@ if ($level === "hs") {
 }
 
 if (!is_dir($destinationDir)) {
-  mkdir($destinationDir, 0775, true);
+  if (!mkdir($destinationDir, 0775, true)) {
+    echo json_encode([
+      "ok" => false,
+      "error" => "Impossibile creare la cartella di destinazione in " . $sectionLabel . ".\nVerifica permessi e riprova."
+    ]);
+    exit;
+  }
 }
 
 $destinationPath = $destinationDir . "/" . $safeFilename;
-if (file_exists($destinationPath)) {
-  echo json_encode(["ok" => false, "error" => "Esiste gia un PDF con lo stesso nome nella cartella di destinazione. Rinominare il file per aggiungerlo."]);
-  exit;
-}
-
-$targetDocs = findDocumentsForTarget($index, $level, $subject, $year, $category);
-if (titleExists($targetDocs, $finalTitle)) {
-  echo json_encode(["ok" => false, "error" => "Esiste gia un documento con lo stesso titolo. Rinominare il titolo per aggiungerlo."]);
-  exit;
-}
-
-if (!move_uploaded_file($file["tmp_name"], $destinationPath)) {
-  echo json_encode(["ok" => false, "error" => "Salvataggio file non riuscito."]);
-  exit;
-}
 
 $solutionPath = null;
+$solutionFilename = null;
+$solutionDestination = null;
+
+// Preflight checks: validate files and uniqueness before moving anything.
+$fileError = validateUploadedPdf($file);
+if ($fileError) {
+  echo json_encode(["ok" => false, "error" => $fileError]);
+  exit;
+}
+
+if (file_exists($destinationPath)) {
+  echo json_encode([
+    "ok" => false,
+    "error" => "Esiste gia un file PDF principale con lo stesso nome in " . $sectionLabel . ".\nRinominare il file per aggiungerlo."
+  ]);
+  exit;
+}
+
+if (stripos($safeFilename, "soluzione") !== false) {
+  echo json_encode(["ok" => false, "error" => "La soluzione va caricata a destra con file Principale associato!"]);
+  exit;
+}
+
+$targetDocs = [];
+if ($level === "uni") {
+  $targetDocs = findDocumentsForUniSubject($index, $subject);
+} else {
+  $targetDocs = findDocumentsForTarget($index, $level, $subject, $year, $category);
+}
+
+if (titleExists($targetDocs, $finalTitle)) {
+  $message = "Esiste gia un documento con lo stesso titolo in " . $sectionLabel . ".\nRinominare il titolo per aggiungerlo.";
+  echo json_encode(["ok" => false, "error" => $message]);
+  exit;
+}
+
+if ($level === "uni" && filenameExistsInSubject($targetDocs, $safeFilename)) {
+  echo json_encode([
+    "ok" => false,
+    "error" => "Esiste gia un file con lo stesso nome in " . $sectionLabel . ".\nRinominare il PDF per aggiungerlo."
+  ]);
+  exit;
+}
+
 if (!empty($_FILES["solution"]["name"])) {
   $solutionFile = $_FILES["solution"];
+  if ($solutionFile["error"] !== UPLOAD_ERR_OK || !is_uploaded_file($solutionFile["tmp_name"])) {
+    echo json_encode(["ok" => false, "error" => "Soluzione: errore durante l'upload."]);
+    exit;
+  }
   $solutionError = validateUploadedPdf($solutionFile);
   if ($solutionError) {
     echo json_encode(["ok" => false, "error" => "Soluzione: " . $solutionError]);
     exit;
   }
-
   $solutionFilename = sanitizePdfFilename($solutionFile["name"]);
+  if (stripos($solutionFilename, "soluzione") === false) {
+    echo json_encode([
+      "ok" => false,
+      "error" => "Il file soluzione deve contenere la parola \"soluzione\" nel nome in " . $sectionLabel . ".\nRinominare il file soluzione per aggiungerlo."
+    ]);
+    exit;
+  }
   $solutionDestination = $destinationDir . "/" . $solutionFilename;
   if (file_exists($solutionDestination)) {
-    echo json_encode(["ok" => false, "error" => "La soluzione esiste gia nella cartella di destinazione. Rinominare il file per aggiungerlo."]);
+    echo json_encode([
+      "ok" => false,
+      "error" => "Esiste gia un file soluzione con lo stesso nome in " . $sectionLabel . ".\nRinominare il file soluzione per aggiungerlo."
+    ]);
     exit;
   }
-  if (!move_uploaded_file($solutionFile["tmp_name"], $solutionDestination)) {
-    echo json_encode(["ok" => false, "error" => "Salvataggio soluzione non riuscito."]);
+  if ($level === "uni" && filenameExistsInSubject($targetDocs, $solutionFilename)) {
+    echo json_encode([
+      "ok" => false,
+      "error" => "Esiste gia un file con lo stesso nome in " . $sectionLabel . ".\nRinominare la soluzione per aggiungerla."
+    ]);
     exit;
   }
+}
 
+if (!move_uploaded_file($file["tmp_name"], $destinationPath)) {
+  echo json_encode([
+    "ok" => false,
+    "error" => "Salvataggio file non riuscito in " . $sectionLabel . ".\nRiprova o verifica i permessi."
+  ]);
+  exit;
+}
+
+if ($solutionDestination) {
+  $solutionFile = $_FILES["solution"];
+  if (!move_uploaded_file($solutionFile["tmp_name"], $solutionDestination)) {
+    @unlink($destinationPath);
+    echo json_encode([
+      "ok" => false,
+      "error" => "Salvataggio soluzione non riuscito in " . $sectionLabel . ".\nRiprova o verifica i permessi."
+    ]);
+    exit;
+  }
   $solutionPath = str_replace($rootPath, "", $solutionDestination);
   $solutionPath = str_replace("\\", "/", $solutionPath);
 }
@@ -276,7 +343,36 @@ if ($level === "hs") {
   }
 }
 
-file_put_contents($indexPath, json_encode($index, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+$jsonHandle = fopen($indexPath, "c+");
+if (!$jsonHandle) {
+  @unlink($destinationPath);
+  if ($solutionDestination) {
+    @unlink($solutionDestination);
+  }
+  echo json_encode([
+    "ok" => false,
+    "error" => "Impossibile salvare l'indice in " . $sectionLabel . ".\nRiprova o verifica i permessi."
+  ]);
+  exit;
+}
+if (!flock($jsonHandle, LOCK_EX)) {
+  fclose($jsonHandle);
+  @unlink($destinationPath);
+  if ($solutionDestination) {
+    @unlink($solutionDestination);
+  }
+  echo json_encode([
+    "ok" => false,
+    "error" => "Impossibile bloccare l'indice in " . $sectionLabel . ".\nRiprova tra qualche secondo."
+  ]);
+  exit;
+}
+ftruncate($jsonHandle, 0);
+rewind($jsonHandle);
+fwrite($jsonHandle, json_encode($index, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+fflush($jsonHandle);
+flock($jsonHandle, LOCK_UN);
+fclose($jsonHandle);
 
 echo json_encode(["ok" => true, "message" => "Upload completato.", "path" => $relativePath], JSON_UNESCAPED_SLASHES);
 
@@ -378,6 +474,40 @@ function titleExists(array $documents, string $title): bool
     }
     $existing = mb_strtolower(trim($doc["title"] ?? ""));
     if ($existing !== "" && $existing === $target) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function findDocumentsForUniSubject(array $index, string $subject): array
+{
+  $docs = [];
+  foreach ($index["levels"]["uni"]["subjects"] ?? [] as $subjectItem) {
+    if (($subjectItem["id"] ?? "") !== $subject) {
+      continue;
+    }
+    foreach ($subjectItem["categories"] ?? [] as $categoryItem) {
+      foreach ($categoryItem["documents"] ?? [] as $doc) {
+        $docs[] = $doc;
+      }
+    }
+  }
+  return $docs;
+}
+
+function filenameExistsInSubject(array $documents, string $filename): bool
+{
+  $target = mb_strtolower($filename);
+  foreach ($documents as $doc) {
+    if (($doc["p"] ?? 1) === 0) {
+      continue;
+    }
+    $fileUrl = $doc["fileUrl"] ?? "";
+    $solutionUrl = $doc["solutionUrl"] ?? "";
+    $fileName = $fileUrl ? mb_strtolower(basename($fileUrl)) : "";
+    $solutionName = $solutionUrl ? mb_strtolower(basename($solutionUrl)) : "";
+    if ($fileName === $target || $solutionName === $target) {
       return true;
     }
   }
